@@ -1,0 +1,36 @@
+From 116109d3c653390a9a61193fbb10b8d96d776b65 Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@manjaro.org>
+Date: Fri, 12 Feb 2021 01:35:10 +0100
+Subject: [PATCH 3/4] arm: sunxi: Add i2s controller to Allwinner V3 dts
+
+Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
+---
+ arch/arm/boot/dts/sun8i-v3.dtsi | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/arch/arm/boot/dts/sun8i-v3.dtsi b/arch/arm/boot/dts/sun8i-v3.dtsi
+index ca4672ed2e02..737532b0f369 100644
+--- a/arch/arm/boot/dts/sun8i-v3.dtsi
++++ b/arch/arm/boot/dts/sun8i-v3.dtsi
+@@ -25,3 +25,18 @@ external_mdio: mdio@2 {
+ &pio {
+ 	compatible = "allwinner,sun8i-v3-pinctrl";
+ };
++
++&soc {
++		i2s0: i2s@1c22000 {
++			#sound-dai-cells = <0>;
++			compatible = "allwinner,sun8i-h3-i2s";
++			reg = <0x01c22000 0x400>;
++			interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&ccu CLK_BUS_I2S0>, <&ccu CLK_I2S0>;
++			clock-names = "apb", "mod";
++			dmas = <&dma 3>, <&dma 3>;
++			resets = <&ccu RST_BUS_I2S0>;
++			dma-names = "rx", "tx";
++			status = "disabled";
++		};
++};
+-- 
+2.30.0
+
