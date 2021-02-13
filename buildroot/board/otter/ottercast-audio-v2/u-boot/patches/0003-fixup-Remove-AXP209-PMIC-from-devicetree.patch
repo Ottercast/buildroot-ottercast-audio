@@ -1,4 +1,4 @@
-From a96af226401f3062f5019ac3801a98d7ea5fba14 Mon Sep 17 00:00:00 2001
+From 3022eda6b0d8735258d6c131d0d14d807781afc5 Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@t-sys.eu>
 Date: Wed, 10 Feb 2021 19:15:44 +0100
 Subject: [PATCH 3/3] fixup: Remove AXP209 PMIC from devicetree

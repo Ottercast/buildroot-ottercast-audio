@@ -1,4 +1,4 @@
-From d7fba348ee90158f82360ac497309dba15d58f4a Mon Sep 17 00:00:00 2001
+From 7e292f5a5e8c1b3d5cf37465737f0ff4388865c1 Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@t-sys.eu>
 Date: Wed, 10 Feb 2021 15:32:27 +0100
 Subject: [PATCH 2/3] sunxi: Add support for OtterCast Audio V2
