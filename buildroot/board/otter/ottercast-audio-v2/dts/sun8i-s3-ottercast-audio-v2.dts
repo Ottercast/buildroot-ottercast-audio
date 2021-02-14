@@ -172,6 +172,21 @@
 
 &uart2 {
 	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart2_pins>;
+	uart-has-rtscts;
+
+	bluetooth {
+		compatible = "brcm,bcm4345c5";
+		clocks = <&rtc 1>;
+		clock-names = "lpo";
+		device-wakeup-gpios = <&pio 4 4 GPIO_ACTIVE_HIGH>;
+		host-wakeup-gpios = <&pio 6 8 GPIO_ACTIVE_HIGH>;
+		max-speed = <1500000>;
+		shutdown-gpios = <&pio 4 5 GPIO_ACTIVE_HIGH>;
+		vbat-supply = <&dcdc_3v3>;
+		vddio-supply = <&dcdc_3v3>;
+	};
 };
 
 &pio {
@@ -183,5 +198,11 @@
 	i2s0_pins: i2s0-pins {
 		pins = "PG10", "PG11", "PG12", "PG13";
 		function = "i2s";
+	};
+
+	uart2_pins: uart2-pins {
+		/* TX, RX, RTS, CTS */
+		pins = "PB0", "PB1", "PB2", "PB3";
+		function = "uart2";
 	};
 };
