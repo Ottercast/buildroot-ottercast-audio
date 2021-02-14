@@ -1,0 +1,12 @@
+
+SHAIRPORT_SYNC_SYSTEMD_SERVICE_VERSION = 0.0.1
+SHAIRPORT_SYNC_SYSTEMD_SERVICE_LICENSE = MIT
+SHAIRPORT_SYNC_SYSTEMD_SERVICE_SOURCE =
+SHAIRPORT_SYNC_SYSTEMD_SERVICE_SITE =
+
+define SHAIRPORT_SYNC_SYSTEMD_SERVICE_INSTALL_TARGET_CMDS
+	$(INSTALL) -D -m 644 $(SHAIRPORT_SYNC_SYSTEMD_SERVICE_PKGDIR)/src/shairport-sync.service $(TARGET_DIR)/usr/lib/systemd/system/shairport-sync.service
+	$(INSTALL) -D -m 644 $(SHAIRPORT_SYNC_SYSTEMD_SERVICE_PKGDIR)/src/50-shairport-sync.preset $(TARGET_DIR)/usr/lib/systemd/system-preset/50-shairport-sync.preset
+endef
+
+$(eval $(generic-package))
