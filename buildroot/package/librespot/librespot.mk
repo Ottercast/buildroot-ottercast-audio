@@ -59,4 +59,9 @@ define LIBRESPOT_INSTALL_TARGET_CMDS
     $(TARGET_STRIP) --strip-all $(TARGET_DIR)/usr/bin/librespot
 endef
 
+define LIBRESPOT_INSTALL_INIT_SYSTEMD
+    $(INSTALL) -D -m 644 $(LIBRESPOT_PKGDIR)/librespot.service \
+        $(TARGET_DIR)/usr/lib/systemd/system/librespot.service
+endef
+
 $(eval $(generic-package))
