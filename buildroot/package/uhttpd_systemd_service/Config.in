@@ -1,0 +1,4 @@
+config BR2_PACKAGE_UHTTPD_SYSTEMD_SERVICE
+	bool "Systemd unit file for uhttpd"
+	help
+	  Provides a systemd unit file for uhttpd
