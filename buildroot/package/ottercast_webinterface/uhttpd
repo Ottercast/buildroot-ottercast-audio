@@ -1,0 +1,1 @@
+UHTTPD_ARGS= -h /var/www -x /cgi-bin -t 60 -T 30 -k 20 -A 1 -n 3 -N 100 -p 0.0.0.0:80 -p [::]:80
