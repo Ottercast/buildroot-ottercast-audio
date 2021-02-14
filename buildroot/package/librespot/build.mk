@@ -59,7 +59,7 @@ define LIBRESPOT_INSTALL_TARGET_CMDS
 endef
 
 define LIBRESPOT_INSTALL_INIT_SYSTEMD
-    $(INSTALL) -D -m 644 $(LIBRESPOT_PKGDIR)/librespot.service \
+    $(INSTALL) -D -m 644 $(LIBRESPOT_PKGDIR)/src/librespot.service \
         $(TARGET_DIR)/usr/lib/systemd/system/librespot.service
 endef
 
