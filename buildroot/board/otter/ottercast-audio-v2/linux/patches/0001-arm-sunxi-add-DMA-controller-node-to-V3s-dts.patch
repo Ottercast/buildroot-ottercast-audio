@@ -1,14 +1,14 @@
-From e5b5c5b23d2fb1928cca152ed7bab55e4dbbafce Mon Sep 17 00:00:00 2001
+From 53ffb559751e70ed51bfaaea62baed568b41c6b4 Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
 Date: Thu, 11 Feb 2021 11:15:49 +0100
-Subject: [PATCH 1/4] arm: sunxi: Add DMA controller node to V3s
+Subject: [PATCH 1/5] arm: sunxi: add DMA controller node to V3s dts
 
 ---
  arch/arm/boot/dts/sun8i-v3s.dtsi | 9 +++++++++
  1 file changed, 9 insertions(+)
 
 diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
-index 89abd4cc7e23..0d13ce86d61d 100644
+index f8f19d8fa795..89286d3d35d1 100644
 --- a/arch/arm/boot/dts/sun8i-v3s.dtsi
 +++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
 @@ -163,6 +163,15 @@ syscon: system-control@1c00000 {

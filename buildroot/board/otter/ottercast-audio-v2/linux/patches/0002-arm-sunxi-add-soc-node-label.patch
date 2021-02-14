@@ -1,7 +1,7 @@
-From b8141ff3db1ff317d6c8a06595d5f25459cce319 Mon Sep 17 00:00:00 2001
+From f2dd5b182608512e481951864c0235ef6e464bb0 Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
 Date: Fri, 12 Feb 2021 01:33:10 +0100
-Subject: [PATCH 2/4] arm: sunxi: Add soc node label
+Subject: [PATCH 2/5] arm: sunxi: add soc node label
 
 The V3 dts is based on the V3s and needs to add some peripherals
 
@@ -11,7 +11,7 @@ Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
-index 0d13ce86d61d..43d05dd3129d 100644
+index 89286d3d35d1..308ba85f4661 100644
 --- a/arch/arm/boot/dts/sun8i-v3s.dtsi
 +++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
 @@ -113,7 +113,7 @@ osc32k: osc32k_clk {

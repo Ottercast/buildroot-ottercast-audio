@@ -1,12 +1,12 @@
-From 45ba6ce59c7083baa7b546405f11576263e2a146 Mon Sep 17 00:00:00 2001
+From 902e9a39b7796b64a075b4abbd80d92f9af47b1c Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
 Date: Fri, 12 Feb 2021 02:10:38 +0100
-Subject: [PATCH 4/4] clk: sunxi-ng: add support for variable rate audio pll
- output
+Subject: [PATCH 4/5] clk: sunxi-ng: v3s: add support for variable rate audio
+ pll output
 
 Previously the variable rate audio pll output was fixed to a divider of
 four. This is unfortunately incompatible with generating commonly used
-I2S mclk rates like 24.576MHz from the 24MHz parent clock.
+I2S core clock rates like 24.576MHz from the 24MHz parent clock.
 This commit adds support for arbitrary audio pll output dividers to fix
 that.
 
