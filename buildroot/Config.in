@@ -1,1 +1,2 @@
 source "$BR2_EXTERNAL_OTTERCASTAUDIO_PATH/package/firmware_ap6236/Config.in"
+source "$BR2_EXTERNAL_OTTERCASTAUDIO_PATH/package/librespot/Config.in"
