@@ -61,6 +61,9 @@ endef
 define LIBRESPOT_INSTALL_INIT_SYSTEMD
     $(INSTALL) -D -m 644 $(LIBRESPOT_PKGDIR)/src/librespot.service \
         $(TARGET_DIR)/usr/lib/systemd/system/librespot.service
+
+    $(INSTALL) -D -m 644 $(LIBRESPOT_PKGDIR)/src/50-librespot.preset \
+        $(TARGET_DIR)/usr/lib/systemd/system-preset/50-librespot.preset
 endef
 
 $(eval $(generic-package))
