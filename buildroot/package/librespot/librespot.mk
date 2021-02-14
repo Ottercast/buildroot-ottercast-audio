@@ -1,12 +1,11 @@
-################################################################################
+#################################################################################
 #
 # librespot
 #
 ################################################################################
 
-LIBRESPOT_VERSION = master
-LIBRESPOT_SITE = git@github.com:librespot-org/librespot.git
-LIBRESPOT_SITE_METHOD = git
+LIBRESPOT_VERSION = 0.1.3
+LIBRESPOT_SITE = $(call github,librespot-org,librespot,v$(LIBRESPOT_VERSION))
 LIBRESPOT_LICENSE = MIT
 LIBRESPOT_LICENSE_FILES = LICENSE
 LIBRESPOT_INSTALL_TARGET = YES
