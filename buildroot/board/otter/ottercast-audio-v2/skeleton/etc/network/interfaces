@@ -2,15 +2,19 @@ auto lo
 iface lo inet loopback
 
 auto wlan0
+allow-hotplug wlan0
 iface wlan0 inet dhcp
 	post-up iw $IFACE set power_save off || true
 
 iface wlan0 inet6 auto
 
 auto eth0
+allow-hotplug eth0
 iface eth0 inet dhcp
 
-iface eth0:1 inet static
-	address 169.254.1.2/16
+auto eth0:1
+allow-hotplug eth0:1
+iface eth0:1 inet manual
+	up ip addr add 169.254.1.2/16 dev $IFACE scope link || true
 
 iface eth0 inet6 auto
