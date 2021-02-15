@@ -11,9 +11,7 @@ iface wlan0 inet6 auto
 
 allow-hotplug eth0
 iface eth0 inet dhcp
-
-auto eth0:1
-iface eth0:1 inet manual
 	up ip addr add 169.254.1.2/16 dev $IFACE scope link || true
+	down ip addr del 169.254.1.2/16 dev $IFACE scope link || true
 
 iface eth0 inet6 auto
