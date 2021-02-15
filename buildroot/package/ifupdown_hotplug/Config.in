@@ -1,0 +1,6 @@
+config BR2_PACKAGE_IFUPDOWN_HOTPLUG
+	bool "hotplug support for ifupdown"
+	depends on BR2_PACKAGE_IFUPDOWN
+	depends on BR2_PACKAGE_HAS_UDEV
+	help
+	  This package adds support for device hotplugging to ifupdown

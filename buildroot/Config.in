@@ -1,4 +1,5 @@
 source "$BR2_EXTERNAL_OTTERCASTAUDIO_PATH/package/firmware_ap6236/Config.in"
+source "$BR2_EXTERNAL_OTTERCASTAUDIO_PATH/package/ifupdown_hotplug/Config.in"
 source "$BR2_EXTERNAL_OTTERCASTAUDIO_PATH/package/ifupdown_wpasupplicant/Config.in"
 source "$BR2_EXTERNAL_OTTERCASTAUDIO_PATH/package/librespot/Config.in"
 source "$BR2_EXTERNAL_OTTERCASTAUDIO_PATH/package/ottercast_webinterface/Config.in"
