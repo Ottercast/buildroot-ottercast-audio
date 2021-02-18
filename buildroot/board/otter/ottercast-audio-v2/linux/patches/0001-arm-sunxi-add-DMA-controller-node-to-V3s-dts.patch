@@ -28,5 +28,5 @@ index f8f19d8fa795..89286d3d35d1 100644
  			compatible = "allwinner,sun8i-v3s-tcon";
  			reg = <0x01c0c000 0x1000>;
 -- 
-2.30.0
+2.30.1
 

@@ -1,7 +1,7 @@
-From 1834cbbfb2437ea4261d48516e3bbb574acbaff4 Mon Sep 17 00:00:00 2001
+From 779c9afd46cdc6afdf7f9820844f809458f53241 Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
 Date: Sun, 14 Feb 2021 04:10:41 +0100
-Subject: [PATCH 5/5] arm: sunxi: add dmas properties to V3s dts
+Subject: [PATCH 4/5] arm: sunxi: add dmas properties to V3s dts
 
 Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
 ---
@@ -58,5 +58,5 @@ index 308ba85f4661..cc0f1229fb85 100644
  			pinctrl-0 = <&spi0_pins>;
  			resets = <&ccu RST_BUS_SPI0>;
 -- 
-2.30.0
+2.30.1
 
