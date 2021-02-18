@@ -4,9 +4,9 @@
 #
 ################################################################################
 
-SNAPCAST_VERSION = v0.20.0
+SNAPCAST_VERSION = v0.23.0
 SNAPCAST_SITE = $(call github,badaix,snapcast,$(SNAPCAST_VERSION))
-SNAPCAST_DEPENDENCIES = libogg alsa-lib avahi # libstdcpp libatomic libflac libvorbisidec
+SNAPCAST_DEPENDENCIES = libogg alsa-lib avahi pulseaudio # libstdcpp libatomic libflac libvorbisidec
 SNAPCAST_LICENSE = GPL-3.0+
 SNAPCAST_LICENSE_FILES = LICENSE
 
@@ -31,13 +31,13 @@ define SNAPCLIENT_INSTALL_INIT_SYSV
 endef
 
 define SNAPCLIENT_INSTALL_INIT_SYSTEMD
-	$(INSTALL) -D -m 0644 $(@D)/client/debian/snapclient.service \
+	$(INSTALL) -D -m 0644 $(SNAPCAST_PKGDIR)/snapclient.service \
 		$(TARGET_DIR)/usr/lib/systemd/system/snapclient.service
 
-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+	# mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
 
-	ln -fs ../../../../usr/lib/systemd/system/snapclient.service \
-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/snapclient.service
+	# ln -fs ../../../../usr/lib/systemd/system/snapclient.service \
+	#	$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/snapclient.service
 endef
 else # !BR2_PACKAGE_SNAPCAST_CLIENT
 	SNAPCAST_CONF_OPTS += -DBUILD_CLIENT=OFF
@@ -52,13 +52,13 @@ define SNAPSERVER_INSTALL_INIT_SYSV
 endef
 
 define SNAPSERVER_INSTALL_INIT_SYSTEMD
-	$(INSTALL) -D -m 0644 $(@D)/server/debian/snapserver.service \
+	$(INSTALL) -D -m 0644 $(SNAPCAST_PKGDIR)/snapserver.service \
 		$(TARGET_DIR)/usr/lib/systemd/system/snapserver.service
 
-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+	# mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
 
-	ln -fs ../../../../usr/lib/systemd/system/snapserver.service \
-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/snapserver.service
+	# ln -fs ../../../../usr/lib/systemd/system/snapserver.service \
+	# 	$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/snapserver.service
 endef
 else # !BR2_PACKAGE_SNAPCAST_SERVER
 	SNAPCAST_CONF_OPTS += -DBUILD_SERVER=OFF
