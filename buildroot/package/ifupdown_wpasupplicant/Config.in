@@ -1,0 +1,8 @@
+config BR2_PACKAGE_IFUPDOWN_WPASUPPLICANT
+	bool "Debian made WPA supplicant ifupdown glue"
+	depends on BR2_PACKAGE_IFUPDOWN
+	depends on BR2_PACKAGE_WPA_SUPPLICANT
+	select BR2_PACKAGE_WPA_SUPPLICANT_CLI
+	help
+	  This package adds support for invoking wpa_supplicant from
+	  ifupdown interface configs

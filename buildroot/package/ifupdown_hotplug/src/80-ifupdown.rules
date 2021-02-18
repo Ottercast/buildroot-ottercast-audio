@@ -1,0 +1,2 @@
+# Handle allow-hotplug interfaces
+SUBSYSTEM=="net", ACTION=="add|remove", RUN+="ifupdown-hotplug"

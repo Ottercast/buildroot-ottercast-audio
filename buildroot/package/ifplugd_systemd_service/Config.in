@@ -1,0 +1,4 @@
+config BR2_PACKAGE_IFPLUGD_SYSTEMD_SERVICE
+	bool "Systemd unit file for ifplugd"
+	help
+	  Provides a systemd unit file for ifplugd

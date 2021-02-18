@@ -25,12 +25,12 @@
 
 		led1 {
 			label = "led:usr";
-			gpios = <&pio 1 4 GPIO_ACTIVE_HIGH>; /* PB4 */
+			gpios = <&pio 1 5 GPIO_ACTIVE_HIGH>; /* PB5 */
 		};
 
 		led2 {
 			label = "led:pwr";
-			gpios = <&pio 1 5 GPIO_ACTIVE_HIGH>; /* PB5 */
+			gpios = <&pio 1 4 GPIO_ACTIVE_HIGH>; /* PB4 */
 			default-state = "on";
 		};
 	};

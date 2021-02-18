@@ -1,0 +1,64 @@
+From 97e05ca7daf16abe16428e337cf7c3c9c563213b Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@t-sys.eu>
+Date: Mon, 15 Feb 2021 17:06:33 +0100
+Subject: [PATCH] Fix stdout/stderr writes for POSIX compatibility
+
+---
+ debian/ifupdown/functions.sh | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
+
+diff --git a/debian/ifupdown/functions.sh b/debian/ifupdown/functions.sh
+index 26404e7..1bec68a 100644
+--- a/debian/ifupdown/functions.sh
++++ b/debian/ifupdown/functions.sh
+@@ -49,10 +49,9 @@ fi
+ 
+ # verbosity variables
+ if [ -n "$IF_WPA_VERBOSITY" ] || [ "$VERBOSITY" = "1" ]; then
+-	TO_NULL="/dev/stdout"
++	IF_WPA_VERBOSITY=1
+ 	DAEMON_VERBOSITY="--verbose"
+ else
+-	TO_NULL="/dev/null"
+ 	DAEMON_VERBOSITY="--quiet"
+ fi
+ 
+@@ -109,15 +108,19 @@ wpa_msg () {
+ 	case "$1" in 
+ 		"verbose")
+ 			shift
+-			echo "$WPA_SUP_PNAME: $@" >$TO_NULL
++			if [ -n "$IF_WPA_VERBOSITY" ]; then
++				( 1>&2 echo "$WPA_SUP_PNAME: $@" )
++			fi
+ 			;;
+ 		"action")
+ 			shift
+-			echo -n "$WPA_SUP_PNAME: $@ -- " >$TO_NULL
++			if [ -n "$IF_WPA_VERBOSITY" ]; then
++				( 1>&2 echo -n "$WPA_SUP_PNAME: $@ -- " )
++			fi
+ 			;;
+ 		"stderr")
+ 			shift
+-			echo "$WPA_SUP_PNAME: $@" >/dev/stderr
++			( 1>&2 echo "$WPA_SUP_PNAME: $@" )
+ 			;;
+ 		*)
+ 			;;
+@@ -458,7 +461,11 @@ wpa_cli_do () {
+ 
+ 	wpa_msg action "$WPACLISET_DESC"
+ 	
+-	wpa_cli $WPACLISET_VARIABLE "$WPACLISET_VALUE" >$TO_NULL
++	if [ -n "$IF_WPA_VERBOSITY" ]; then
++		wpa_cli $WPACLISET_VARIABLE "$WPACLISET_VALUE" 1>&2
++	else
++		wpa_cli $WPACLISET_VARIABLE "$WPACLISET_VALUE" > /dev/null
++	fi
+ 
+ 	if [ "$?" -ne 0 ]; then
+ 		wpa_msg stderr "$WPACLISET_DESC failed!"
+-- 
+2.30.1
+

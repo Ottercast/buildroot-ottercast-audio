@@ -1,9 +1,8 @@
 [Unit]
 Description=Ottercast Config                       
 After=sound.target
-After=avahi-daemon.service
-Wants=network-online.target
-After=network.target network-online.target
+Wants=network.target
+After=network.target
 
 [Service]
 ExecStart=/usr/bin/env php /var/www/cgi-bin/applyConfig.php
