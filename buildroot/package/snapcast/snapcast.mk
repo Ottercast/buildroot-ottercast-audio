@@ -27,11 +27,11 @@ ifeq ($(BR2_PACKAGE_SNAPCAST_CLIENT),y)
 SNAPCAST_POST_INSTALL_TARGET_HOOKS += SNAPCLIENT_INSTALL_CONFIG
 
 define SNAPCLIENT_INSTALL_INIT_SYSV
-	$(INSTALL) -m 0755 -D $(SNAPCAST_PKGDIR)/S99snapclient $(TARGET_DIR)/etc/init.d/S99snapclient
+	$(INSTALL) -m 0755 -D $(SNAPCAST_PKGDIR)/src/S99snapclient $(TARGET_DIR)/etc/init.d/S99snapclient
 endef
 
 define SNAPCLIENT_INSTALL_INIT_SYSTEMD
-	$(INSTALL) -D -m 0644 $(SNAPCAST_PKGDIR)/snapclient.service \
+	$(INSTALL) -D -m 0644 $(SNAPCAST_PKGDIR)/src/snapclient.service \
 		$(TARGET_DIR)/usr/lib/systemd/system/snapclient.service
 
 	# mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
@@ -48,11 +48,11 @@ ifeq ($(BR2_PACKAGE_SNAPCAST_SERVER),y)
 SNAPCAST_POST_INSTALL_TARGET_HOOKS += SNAPSERVER_INSTALL_CONFIG
 
 define SNAPSERVER_INSTALL_INIT_SYSV
-	$(INSTALL) -m 0755 -D $(SNAPCAST_PKGDIR)/S99snapserver $(TARGET_DIR)/etc/init.d/S99snapserver
+	$(INSTALL) -m 0755 -D $(SNAPCAST_PKGDIR)/src/S99snapserver $(TARGET_DIR)/etc/init.d/S99snapserver
 endef
 
 define SNAPSERVER_INSTALL_INIT_SYSTEMD
-	$(INSTALL) -D -m 0644 $(SNAPCAST_PKGDIR)/snapserver.service \
+	$(INSTALL) -D -m 0644 $(SNAPCAST_PKGDIR)/src/snapserver.service \
 		$(TARGET_DIR)/usr/lib/systemd/system/snapserver.service
 
 	# mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
@@ -68,6 +68,9 @@ endif
 define SNAPCAST_INSTALL_INIT_SYSTEMD
 	$(SNAPCLIENT_INSTALL_INIT_SYSTEMD)
 	$(SNAPSERVER_INSTALL_INIT_SYSTEMD)
+
+	$(INSTALL) -D -m 644 $(SNAPCAST_PKGDIR)/src/50-snapcast.preset \
+		$(TARGET_DIR)/usr/lib/systemd/system-preset/50-snapcast.preset
 endef
 
 define SNAPCAST_INSTALL_INIT_SYSV

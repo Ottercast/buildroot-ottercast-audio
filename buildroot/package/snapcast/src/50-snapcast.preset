@@ -1,0 +1,2 @@
+disable snapclient.service
+disable snapserver.service
