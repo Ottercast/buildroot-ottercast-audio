@@ -29,17 +29,18 @@ jobs:
           cd buildroot-2020.11.2
           make BR2_EXTERNAL=../buildroot-ottercast-audio/buildroot/ ottercast_audio_v2_defconfig
           make -j$(nproc --all)
+          gzip output/images/sdcard.img
 
       # Upload artifacts
       # First party upload plugin is magic and does not need github token
       - id: pkgname
         name: Find image name
-        run: echo "::set-output name=imgfile::$(realpath "$GITHUB_WORKSPACE"/../buildroot-2020.11.2/output/images/sdcard.img)"
+        run: echo "::set-output name=imgfile::$(realpath "$GITHUB_WORKSPACE"/../buildroot-2020.11.2/output/images/sdcard.img.gz)"
 
       - name: Upload image
         uses: actions/upload-artifact@v2-preview
         with:
-          name: sdcard.img
+          name: sdcard.img.gz
           path: ${{ steps.pkgname.outputs.imgfile }}
 
   release:
@@ -53,7 +54,7 @@ jobs:
       - name: Download package
         uses: actions/download-artifact@v1
         with:
-          name: sdcard.img
+          name: sdcard.img.gz
           path: .
 
       # Upload actual release
@@ -62,6 +63,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            sdcard.img
+            sdcard.img.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
