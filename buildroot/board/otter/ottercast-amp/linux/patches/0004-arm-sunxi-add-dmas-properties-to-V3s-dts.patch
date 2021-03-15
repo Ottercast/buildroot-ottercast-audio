@@ -1,0 +1,62 @@
+From 779c9afd46cdc6afdf7f9820844f809458f53241 Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@manjaro.org>
+Date: Sun, 14 Feb 2021 04:10:41 +0100
+Subject: [PATCH 4/5] arm: sunxi: add dmas properties to V3s dts
+
+Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
+---
+ arch/arm/boot/dts/sun8i-v3s.dtsi | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
+index 308ba85f4661..cc0f1229fb85 100644
+--- a/arch/arm/boot/dts/sun8i-v3s.dtsi
++++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
+@@ -275,6 +275,8 @@ crypto@1c15000 {
+ 			interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&ccu CLK_BUS_CE>, <&ccu CLK_CE>;
+ 			clock-names = "ahb", "mod";
++			dmas = <&dma 16>, <&dma 16>;
++			dma-names = "rx", "tx";
+ 			resets = <&ccu RST_BUS_CE>;
+ 			reset-names = "ahb";
+ 		};
+@@ -430,6 +432,8 @@ uart0: serial@1c28000 {
+ 			reg-shift = <2>;
+ 			reg-io-width = <4>;
+ 			clocks = <&ccu CLK_BUS_UART0>;
++			dmas = <&dma 6>, <&dma 6>;
++			dma-names = "rx", "tx";
+ 			resets = <&ccu RST_BUS_UART0>;
+ 			status = "disabled";
+ 		};
+@@ -441,6 +445,8 @@ uart1: serial@1c28400 {
+ 			reg-shift = <2>;
+ 			reg-io-width = <4>;
+ 			clocks = <&ccu CLK_BUS_UART1>;
++			dmas = <&dma 7>, <&dma 7>;
++			dma-names = "rx", "tx";
+ 			resets = <&ccu RST_BUS_UART1>;
+ 			status = "disabled";
+ 		};
+@@ -452,6 +458,8 @@ uart2: serial@1c28800 {
+ 			reg-shift = <2>;
+ 			reg-io-width = <4>;
+ 			clocks = <&ccu CLK_BUS_UART2>;
++			dmas = <&dma 8>, <&dma 8>;
++			dma-names = "rx", "tx";
+ 			resets = <&ccu RST_BUS_UART2>;
+ 			pinctrl-0 = <&uart2_pins>;
+ 			pinctrl-names = "default";
+@@ -531,6 +539,8 @@ spi0: spi@1c68000 {
+ 			interrupts = <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&ccu CLK_BUS_SPI0>, <&ccu CLK_SPI0>;
+ 			clock-names = "ahb", "mod";
++			dmas = <&dma 23>, <&dma 23>;
++			dma-names = "rx", "tx";
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&spi0_pins>;
+ 			resets = <&ccu RST_BUS_SPI0>;
+-- 
+2.30.1
+

@@ -1,0 +1,253 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR X11)
+/*
+ * Copyright 2021 Tobias Schramm <t.schramm@t-sys.eu>
+ */
+
+/dts-v1/;
+#include "sun8i-v3.dtsi"
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+
+/ {
+	model = "OtterCast Amp";
+	compatible = "otter,ottercast-amp", "allwinner,sun8i-s3";
+
+	aliases {
+		serial0 = &uart1;
+	};
+
+	chosen {
+		stdout-path = "serial0:115200n8";
+	};
+
+	leds {
+		compatible = "gpio-leds";
+
+		led1 {
+			label = "led:usr";
+			gpios = <&pio 4 0 GPIO_ACTIVE_HIGH>; /* PE0 */
+			linux,default-trigger = "heartbeat";
+		};
+
+		led2 {
+			label = "led:pwr";
+			gpios = <&pio 4 1 GPIO_ACTIVE_HIGH>; /* PE1 */
+			default-state = "on";
+		};
+	};
+
+	/*
+	 * Power tree
+	 * This is a virtual regulator, root of the power tree
+	 * Should be replaced with stusb-provided regulator
+	 */
+
+	vcc_vbus: vcc-vbus {
+		compatible = "regulator-fixed";
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-name = "vcc-vbus";
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+	};
+
+	/* Regulators supplied by vcc_vbus */
+
+	vcc_3v3: vcc-3v3 {
+		compatible = "regulator-fixed";
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-name = "vcc-3v3";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		vin-supply = <&vcc_vbus>;
+	};
+
+	/* Regulators supplied by vcc_3v3 */
+
+	vcc_ddr: vcc-ddr {
+		compatible = "regulator-fixed";
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-name = "vcc-ddr";
+		regulator-min-microvolt = <1500000>;
+		regulator-max-microvolt = <1500000>;
+		vin-supply = <&vcc_3v3>;
+	};
+
+	vcc_1v1: vcc-1v1 {
+		compatible = "regulator-fixed";
+		regulator-always-on;
+		regulator-name = "vcc-1v1";
+		regulator-min-microvolt = <1100000>;
+		regulator-max-microvolt = <1100000>;
+		vin-supply = <&vcc_3v3>;
+	};
+
+	vcc_3v0a: vcc-3v0a {
+		compatible = "regulator-fixed";
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-name = "vcc-3v0a";
+		regulator-min-microvolt = <3000000>;
+		regulator-max-microvolt = <3000000>;
+		vin-supply = <&vcc_3v3>;
+	};
+
+/*
+	sound {
+		compatible = "simple-audio-card";
+		simple-audio-card,name = "Otter-Audio-Card";
+		simple-audio-card,format = "i2s";
+		simple-audio-card,bitclock-master = <&dailink0_master>;
+		simple-audio-card,frame-master = <&dailink0_master>;
+		simple-audio-card,widgets =
+			"Microphone", "Microphone Jack",
+			"Headphone", "Headphone Jack",
+			"Line", "Line In Jack";
+		simple-audio-card,routing =
+			"MICIN", "Microphone Jack",
+			"Headphone Jack", "LHPOUT",
+			"Headphone Jack", "RHPOUT",
+			"LLINEIN", "Line In Jack",
+			"RLINEIN", "Line In Jack";
+		dailink0_master: simple-audio-card,cpu {
+			clocks = <&i2s_clk>;
+			sound-dai = <&i2s0>;
+		};
+		simple-audio-card,codec {
+			clocks = <&i2s_clk>;
+			sound-dai = <&ssm2603>;
+		};
+	};
+*/
+
+	wifi_pwrseq: wifi_pwrseq {
+		compatible = "mmc-pwrseq-simple";
+		reset-gpios = <&pio 1 11 GPIO_ACTIVE_LOW>; /* PB11 WL-PMU-EN */
+		clocks = <&rtc 1>;
+		clock-names = "ext_clock";
+		post-power-on-delay-ms = <200>;
+	};
+};
+
+&emac {
+	phy-handle = <&int_mii_phy>;
+	phy-mode = "mii";
+	status = "okay";
+};
+
+&i2c1 {
+	status = "okay";
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c1_pe_pins>;
+
+	stusb@28 {
+		compatible = "st,stusb4500";
+		reg = <0x28>;
+	};
+
+	tas5825m@4c {
+		compatible = "ti,tas5825m";
+		reg = <0x4c>;
+	};
+
+	tas5825m@4d {
+		compatible = "ti,tas5825m";
+		reg = <0x4d>;
+	};
+
+	lm75@48 {
+		compatible = "national,lm75b";
+		reg = <0x48>;
+	};
+};
+
+&i2s0 {
+	status = "okay";
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2s0_pins>;
+};
+
+&mmc0 {
+	vmmc-supply = <&vcc_3v3>;
+	bus-width = <4>;
+	broken-cd;
+	status = "okay";
+};
+
+&mmc1 {
+	vmmc-supply = <&vcc_3v3>;
+	vqmmc-supply = <&vcc_3v3>;
+	mmc-pwrseq = <&wifi_pwrseq>;
+	bus-width = <4>;
+	non-removable;
+	no-1-8-v;
+	cap-sd-highspeed;
+	status = "okay";
+
+	brcmf: wifi@1 {
+		reg = <1>;
+		compatible = "brcm,bcm4329-fmac";
+	};
+};
+
+&mmc2 {
+	vmmc-supply = <&vcc_3v3>;
+	vqmmc-supply = <&vcc_3v3>;
+	bus-width = <8>;
+	non-removable;
+	no-1-8-v;
+	status = "okay";
+};
+
+&pio {
+	vcc-pd-supply = <&vcc_3v3>;
+	vcc-pe-supply = <&vcc_3v3>;
+};
+
+&uart1 {
+	status = "okay";
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart1_pg_pins>;
+};
+
+&uart2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart2_pins>;
+	uart-has-rtscts;
+
+	bluetooth {
+		compatible = "brcm,bcm4345c5";
+		clocks = <&rtc 1>;
+		clock-names = "lpo";
+		device-wakeup-gpios = <&pio 4 4 GPIO_ACTIVE_HIGH>;
+		host-wakeup-gpios = <&pio 6 8 GPIO_ACTIVE_HIGH>;
+		max-speed = <1500000>;
+		shutdown-gpios = <&pio 4 5 GPIO_ACTIVE_HIGH>;
+		vbat-supply = <&vcc_3v3>;
+		vddio-supply = <&vcc_3v3>;
+	};
+};
+
+&pio {
+	uart1_pg_pins: uart1-pg-pins {
+		pins = "PG6", "PG7";
+		function = "uart1";
+	};
+
+	i2s0_pins: i2s0-pins {
+		pins = "PG10", "PG11", "PG12", "PG13";
+		function = "i2s";
+	};
+
+	uart2_pins: uart2-pins {
+		/* TX, RX, RTS, CTS */
+		pins = "PB0", "PB1", "PB2", "PB3";
+		function = "uart2";
+	};
+};
