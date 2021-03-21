@@ -151,6 +151,7 @@
 		reg = <0x4c>;
 		dvdd-supply = <&vcc_3v3>;
 		pvdd-supply = <&vcc_vbus>;
+		shutdown-gpios = <&pio 4 7 GPIO_ACTIVE_HIGH>;
 	};
 
 	tas_woofer: tas5825m@4d {
@@ -159,6 +160,7 @@
 		reg = <0x4d>;
 		dvdd-supply = <&vcc_3v3>;
 		pvdd-supply = <&vcc_vbus>;
+		shutdown-gpios = <&pio 4 8 GPIO_ACTIVE_HIGH>;
 	};
 
 	lm75@48 {
