@@ -200,6 +200,8 @@
 	bus-width = <8>;
 	non-removable;
 	no-1-8-v;
+	pinctrl-names = "default";
+	pinctrl-0 = <&mmc2_pins>;
 	status = "okay";
 };
 
@@ -243,6 +245,15 @@
 	i2s0_pins: i2s0-pins {
 		pins = "PG10", "PG11", "PG12", "PG13";
 		function = "i2s";
+	};
+
+	mmc2_pins: mmc2-pins {
+		pins = "PC0", "PC1", "PC2", "PC3",
+		       "PC4", "PC5", "PC6", "PC7",
+		       "PC8", "PC9", "PC10";
+		function = "mmc2";
+		drive-strength = <30>;
+		bias-pull-up;
 	};
 
 	uart2_pins: uart2-pins {
