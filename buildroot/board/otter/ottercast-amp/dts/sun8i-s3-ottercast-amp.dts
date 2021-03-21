@@ -94,33 +94,30 @@
 		vin-supply = <&vcc_3v3>;
 	};
 
-/*
 	sound {
 		compatible = "simple-audio-card";
 		simple-audio-card,name = "Otter-Audio-Card";
 		simple-audio-card,format = "i2s";
 		simple-audio-card,bitclock-master = <&dailink0_master>;
 		simple-audio-card,frame-master = <&dailink0_master>;
+		simple-audio-card,mclk-fs = <256>;
 		simple-audio-card,widgets =
-			"Microphone", "Microphone Jack",
-			"Headphone", "Headphone Jack",
-			"Line", "Line In Jack";
+			"Speaker", "Speaker";
 		simple-audio-card,routing =
-			"MICIN", "Microphone Jack",
-			"Headphone Jack", "LHPOUT",
-			"Headphone Jack", "RHPOUT",
-			"LLINEIN", "Line In Jack",
-			"RLINEIN", "Line In Jack";
+			"Speaker", "OUTA",
+			"Speaker", "OUTB";
 		dailink0_master: simple-audio-card,cpu {
-			clocks = <&i2s_clk>;
 			sound-dai = <&i2s0>;
 		};
 		simple-audio-card,codec {
-			clocks = <&i2s_clk>;
-			sound-dai = <&ssm2603>;
+			sound-dai = <&tas_main>;
 		};
-	};
+/*
+		simple-audio-card,codec {
+			sound-dai = <&tas_woofer>;
+		};
 */
+	};
 
 	wifi_pwrseq: wifi_pwrseq {
 		compatible = "mmc-pwrseq-simple";
@@ -148,14 +145,20 @@
 		reg = <0x28>;
 	};
 
-	tas5825m@4c {
+	tas_main: tas5825m@4c {
+		#sound-dai-cells = <0>;
 		compatible = "ti,tas5825m";
 		reg = <0x4c>;
+		dvdd-supply = <&vcc_3v3>;
+		pvdd-supply = <&vcc_vbus>;
 	};
 
-	tas5825m@4d {
+	tas_woofer: tas5825m@4d {
+		#sound-dai-cells = <0>;
 		compatible = "ti,tas5825m";
 		reg = <0x4d>;
+		dvdd-supply = <&vcc_3v3>;
+		pvdd-supply = <&vcc_vbus>;
 	};
 
 	lm75@48 {
