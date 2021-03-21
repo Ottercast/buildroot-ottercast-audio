@@ -152,6 +152,7 @@
 		dvdd-supply = <&vcc_3v3>;
 		pvdd-supply = <&vcc_vbus>;
 		shutdown-gpios = <&pio 4 7 GPIO_ACTIVE_HIGH>;
+		tas5825m,gpio2-func = "sdout";
 	};
 
 	tas_woofer: tas5825m@4d {
