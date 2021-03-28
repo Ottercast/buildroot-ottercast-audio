@@ -5,7 +5,7 @@ Wants=network.target
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/env php /var/www/cgi-bin/applyConfig.php
+ExecStart=/usr/bin/env php /opt/ottercast/apply_config.php
 
 [Install]
 WantedBy=multi-user.target

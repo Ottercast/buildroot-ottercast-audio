@@ -7,7 +7,7 @@ BOARD_DIR="$(dirname $0)"
 cp -r "$BOARD_DIR"/skeleton/* "$TARGET_DIR"
 
 
-OTTERCAST_CONFFILE="$BINARIES_DIR"/config.sh
+OTTERCAST_CONFFILE="$BINARIES_DIR"/config.ini
 
 if ! [ -f "$OTTERCAST_CONFFILE" ]; then
 	touch "$OTTERCAST_CONFFILE"
