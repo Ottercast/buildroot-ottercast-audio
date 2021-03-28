@@ -125,6 +125,7 @@
 		clocks = <&rtc 1>;
 		clock-names = "ext_clock";
 		post-power-on-delay-ms = <200>;
+		power-off-on-shutdown;
 	};
 };
 
