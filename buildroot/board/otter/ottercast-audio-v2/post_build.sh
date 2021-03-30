@@ -15,3 +15,7 @@ fi
 
 ln -fs /usr/lib/systemd/system/ifplugd\@.service \
 	"$TARGET_DIR"/usr/lib/systemd/system/multi-user.target.wants/ifplugd\@eth0.service
+
+mkdir -p "$TARGET_DIR"/root/.ssh
+ln -fs /mnt/ssh_authorized_keys "$TARGET_DIR"/root/.ssh/authorized_keys
+
