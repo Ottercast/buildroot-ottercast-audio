@@ -19,3 +19,12 @@ ln -fs /usr/lib/systemd/system/ifplugd\@.service \
 mkdir -p "$TARGET_DIR"/root/.ssh
 ln -fs /mnt/ssh_authorized_keys "$TARGET_DIR"/root/.ssh/authorized_keys
 
+# Environment for Snapclient (written by Ottercast-Webinterface/apply_config.php)
+ln -fs /tmp/snapclient_env "$TARGET_DIR"/etc/default/snapclient
+
+ln -fs /tmp/resolv.conf "$TARGET_DIR"/etc/resolv.conf
+
+ln -fs /tmp/hostname "$TARGET_DIR"/etc/hostname
+
+mkdir -p "$TARGET_DIR"/root/.config/pulse
+mkdir -p "$TARGET_DIR"/var/lib/pulse
