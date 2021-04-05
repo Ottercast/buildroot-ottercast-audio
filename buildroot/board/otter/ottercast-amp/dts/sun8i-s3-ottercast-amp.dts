@@ -18,6 +18,10 @@
 
 	chosen {
 		stdout-path = "serial0:115200n8";
+
+		framebuffer-lcd {
+			status = "okay";
+		};
 	};
 
 	soc {
@@ -49,19 +53,96 @@
 		};
 	};
 
+	backlight: backlight {
+		compatible = "pwm-backlight";
+		power-supply = <&vcc_3v3>;
+		pinctrl-0 = <&backlight_pwm_pin>;
+		pinctrl-names = "default";
+		pwms = <&pwm 0 1000000 0>;
+	};
+
 	leds {
 		compatible = "gpio-leds";
 
-		led1 {
+		led0 {
 			label = "led:usr";
 			gpios = <&pio 4 0 GPIO_ACTIVE_HIGH>; /* PE0 */
 			linux,default-trigger = "heartbeat";
 		};
-
-		led2 {
+/*
+		led1 {
 			label = "led:pwr";
-			gpios = <&pio 4 1 GPIO_ACTIVE_HIGH>; /* PE1 */
+			gpios = <&pio 4 1 GPIO_ACTIVE_HIGH>;*/ /* PE1 *//*
 			default-state = "on";
+		};
+*/
+	};
+
+	rgb_panel: rgb-panel {
+		compatible = "panel-dpi";
+		backlight = <&backlight>;
+		/* Handled by HW peripheral? */
+/*		enable-gpios = <&pio 3 19 GPIO_ACTIVE_HIGH>; */ /* PD19 */
+		pinctrl-names = "default";
+		pinctrl-0 = <&panel_pins>;
+		power-supply = <&vcc_3v3>;
+		height-mm = <34>;
+		width-mm = <81>;
+
+		panel-timing {
+			clock-frequency = <25000000>;
+			hactive = <800>;
+			hfront-porch = <10>;
+			hback-porch = <20>;
+			hsync-len = <4>;
+			hsync-active = <0>;
+			vactive = <340>;
+			vfront-porch = <8>;
+			vback-porch = <10>;
+			vsync-len = <4>;
+			vsync-active = <0>;
+			de-active = <1>;
+			pixelclk-active = <1>;
+		};
+
+		port {
+			lcd_in: endpoint {
+				remote-endpoint = <&tcon0_out_lcd>;
+			};
+		};
+/*
+		ports {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			port@0 {
+				reg = <0>;
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				panel_in_rgb: endpoint@0 {
+					reg = <0>;
+					remote-endpoint = <&tcon0_out>;
+				};
+			};
+		};
+*/
+	};
+
+        spi_lcd {
+		compatible = "spi-gpio";
+		#address-cells = <1>;
+		ranges;
+
+		cs-gpios = <&pio 1 6 GPIO_ACTIVE_HIGH>; /* PB6 */
+/*		mosi-gpios = <&pio 1 9 GPIO_ACTIVE_HIGH>; *//* PB9 */
+		mosi-gpios = <&pio 4 1 GPIO_ACTIVE_HIGH>; /* PE1 */
+		sck-gpios = <&pio 1 7 GPIO_ACTIVE_HIGH>; /* PB7 */
+		num-chipselects = <1>;
+
+		spidev@0 {
+			reg = <0>;
+			compatible = "spidev";
 		};
 	};
 
@@ -156,6 +237,10 @@
 		post-power-on-delay-ms = <200>;
 		power-off-on-shutdown;
 	};
+};
+
+&de {
+	status = "okay";
 };
 
 &emac {
@@ -296,5 +381,28 @@
 		/* TX, RX, RTS, CTS */
 		pins = "PB0", "PB1", "PB2", "PB3";
 		function = "uart2";
+	};
+
+	backlight_pwm_pin: backlight-pwm-pin {
+		pins = "PB4";
+		function = "pwm0";
+	};
+
+	panel_pins: panel-pins {
+		pins = "PD0",  "PD1",  "PD2",  "PD3",  "PD4",  "PD5",
+		       "PD6",  "PD7",  "PD8",  "PD9",  "PD10", "PD11",
+		       "PD12", "PD13", "PD14", "PD15", "PD16", "PD17",
+		       "PD18", "PD19", "PD20", "PD21";
+		function = "lcd";
+	};
+};
+
+&tcon0 {
+	status = "okay";
+};
+
+&tcon0_out {
+	tcon0_out_lcd: endpoint {
+		remote-endpoint = <&lcd_in>;
 	};
 };
