@@ -1,0 +1,12 @@
+[Unit]
+Description=start global dbus session in /tmp/dbus-session
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=dbus-launch
+StandardOutput=file:/tmp/dbus-session
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
