@@ -20,6 +20,15 @@
 		stdout-path = "serial0:115200n8";
 	};
 
+	soc {
+		pwm: pwm@1c21400 {
+			compatible = "allwinner,sun7i-a20-pwm";
+			reg = <0x01c21400 0xc>;
+			clocks = <&osc24M>;
+			#pwm-cells = <3>;
+		};
+	};
+
 	leds {
 		compatible = "gpio-leds";
 
