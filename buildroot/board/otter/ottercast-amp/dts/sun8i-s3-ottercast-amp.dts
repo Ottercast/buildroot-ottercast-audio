@@ -69,13 +69,12 @@
 			gpios = <&pio 4 0 GPIO_ACTIVE_HIGH>; /* PE0 */
 			linux,default-trigger = "heartbeat";
 		};
-/*
+
 		led1 {
 			label = "led:pwr";
-			gpios = <&pio 4 1 GPIO_ACTIVE_HIGH>;*/ /* PE1 *//*
+			gpios = <&pio 4 1 GPIO_ACTIVE_HIGH>; /* PE1 */
 			default-state = "on";
 		};
-*/
 	};
 
 	rgb_panel: rgb-panel {
@@ -135,8 +134,7 @@
 		ranges;
 
 		cs-gpios = <&pio 1 6 GPIO_ACTIVE_HIGH>; /* PB6 */
-/*		mosi-gpios = <&pio 1 9 GPIO_ACTIVE_HIGH>; *//* PB9 */
-		mosi-gpios = <&pio 4 1 GPIO_ACTIVE_HIGH>; /* PE1 */
+		mosi-gpios = <&pio 1 9 GPIO_ACTIVE_HIGH>; /* PB9 */
 		sck-gpios = <&pio 1 7 GPIO_ACTIVE_HIGH>; /* PB7 */
 		num-chipselects = <1>;
 
