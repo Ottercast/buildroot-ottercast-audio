@@ -6,7 +6,7 @@ led led:pwr on
 
 setexpr rootpart ${distro_bootpart} + 1 || rootpart=4
 part uuid ${devtype} ${devnum}:${rootpart} rootuuid
-setenv bootargs initcall_debug root=PARTUUID=${rootuuid} rw rootwait earlycon
+setenv bootargs initcall_debug root=PARTUUID=${rootuuid} rw rootwait earlycon fbcon=rotate:3
 load ${devtype} ${devnum}:${distro_bootpart} ${kernel_loadaddr} zImage
 load ${devtype} ${devnum}:${distro_bootpart} ${dtb_loadaddr} ${fdtfile}
 bootz ${kernel_loadaddr} - ${dtb_loadaddr}
