@@ -1,4 +1,4 @@
-From 50dfe9b2ca9e32c1f55d2e0211d37e310efea156 Mon Sep 17 00:00:00 2001
+From 649ac3d6382fb129a52a224e8eec8c1674d77203 Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@t-sys.eu>
 Date: Thu, 8 Apr 2021 01:37:01 +0200
 Subject: [PATCH 14/15] drm/panel: add driver for KD35WVFPD107 panel
@@ -11,8 +11,8 @@ Signed-off-by: Tobias Schramm <t.schramm@t-sys.eu>
 ---
  drivers/gpu/drm/panel/Kconfig                 |  10 +
  drivers/gpu/drm/panel/Makefile                |   1 +
- .../drm/panel/panel-startek-kd35wvfpd107.c    | 289 ++++++++++++++++++
- 3 files changed, 300 insertions(+)
+ .../drm/panel/panel-startek-kd35wvfpd107.c    | 280 ++++++++++++++++++
+ 3 files changed, 291 insertions(+)
  create mode 100644 drivers/gpu/drm/panel/panel-startek-kd35wvfpd107.c
 
 diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
@@ -50,10 +50,10 @@ index 2ba560bca61d..6611ffe2ee80 100644
  obj-$(CONFIG_DRM_PANEL_TPO_TD028TTEC1) += panel-tpo-td028ttec1.o
 diff --git a/drivers/gpu/drm/panel/panel-startek-kd35wvfpd107.c b/drivers/gpu/drm/panel/panel-startek-kd35wvfpd107.c
 new file mode 100644
-index 000000000000..adb5ee63621a
+index 000000000000..5656ead8ca69
 --- /dev/null
 +++ b/drivers/gpu/drm/panel/panel-startek-kd35wvfpd107.c
-@@ -0,0 +1,289 @@
+@@ -0,0 +1,280 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
 + * Copyright (C) 2021, Tobias Schramm
@@ -132,8 +132,6 @@ index 000000000000..adb5ee63621a
 +	 * Perform 5 resets to ensure interface synchronization
 +	 * Maximum number of arguments to any command is 4
 +	 */
-+	pr_err("Running init sequence\n");
-+	pr_err("SPI mode: %u\n", startek->spi->mode);
 +	for (i = 0; i < 5; i++) {
 +		STARTEK_SPI(startek, 0x01)
 +		msleep(100);
@@ -184,8 +182,6 @@ index 000000000000..adb5ee63621a
 +{
 +	struct startek_panel *startek = panel_to_startek(panel);
 +	int ret;
-+
-+	pr_err("Startek prepare\n");
 +
 +	gpiod_set_value(startek->reset, 0);
 +
@@ -273,8 +269,6 @@ index 000000000000..adb5ee63621a
 +	spi->bits_per_word = 9;
 +	spi->max_speed_hz = 1000000;
 +
-+	pr_err("Startek probe\n");
-+
 +	startek = devm_kzalloc(dev, sizeof(*startek), GFP_KERNEL);
 +	if (!startek)
 +		return -ENOMEM;
@@ -305,10 +299,7 @@ index 000000000000..adb5ee63621a
 +	if (ret)
 +		return ret;
 +
-+	pr_err("Startek panel add\n");
 +	drm_panel_add(&startek->panel);
-+
-+	pr_err("Startek panel probed\n");
 +
 +	return 0;
 +}
