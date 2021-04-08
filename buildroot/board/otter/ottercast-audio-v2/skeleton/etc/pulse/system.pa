@@ -23,13 +23,17 @@ load-module module-device-restore
 load-module module-stream-restore
 load-module module-card-restore
 
+# Load ALSA devices manually (to ensure order and defaults)
+load-module module-alsa-sink tsched=0 device=default:CARD=OtterAudioCard sink_name=Speakers sink_properties=device.description=Speakers
+load-module module-alsa-source tsched=0 device=default:CARD=Codec source_name=LineIn source_properties=device.description=LineIn
+
 ### Automatically load driver modules depending on the hardware available
-.ifexists module-udev-detect.so
-load-module module-udev-detect tsched=false
-.else
-### Use the static hardware detection module (for systems that lack udev/hal support)
-load-module module-detect tsched=false
-.endif
+#.ifexists module-udev-detect.so
+#load-module module-udev-detect tsched=false
+#.else
+#### Use the static hardware detection module (for systems that lack udev/hal support)
+#load-module module-detect tsched=false
+#.endif
 
 ### Load several protocols
 .ifexists module-esound-protocol-unix.so
