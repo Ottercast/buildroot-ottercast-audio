@@ -1,0 +1,13 @@
+[Unit]
+Description=spotifyd
+Wants=network-online.target
+After=network.target network-online.target
+
+[Service]
+Environment="SPOTIFYD_ARGS="
+EnvironmentFile=-/etc/default/spotifyd
+EnvironmentFile=-/tmp/dbus-session
+ExecStart=/usr/bin/spotifyd -d %H $SPOTIFYD_ARGS
+
+[Install]
+WantedBy=multi-user.target

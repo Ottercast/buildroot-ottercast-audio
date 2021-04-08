@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-OTTERCAST_WEBINTERFACE_VERSION = 0.4.1
+OTTERCAST_WEBINTERFACE_VERSION = 0.5.4
 OTTERCAST_WEBINTERFACE_SITE = $(call github,Ottercast,webinterface,v$(OTTERCAST_WEBINTERFACE_VERSION))
 OTTERCAST_WEBINTERFACE_LICENSE = MIT
 OTTERCAST_WEBINTERFACE_LICENSE_FILES = LICENSE
@@ -22,7 +22,7 @@ define OTTERCAST_WEBINTERFACE_INSTALL_TARGET_CMDS
 	ln -fs /usr/lib/systemd/system/ottercast-config.service $(TARGET_DIR)/usr/lib/systemd/system/multi-user.target.wants/ottercast-config.service
 
 	mkdir -p $(TARGET_DIR)/etc/wpa_supplicant/
-	$(INSTALL) -D -m 0644 $(OTTERCAST_WEBINTERFACE_PKGDIR)/src/librespot $(TARGET_DIR)/etc/default/librespot
+	$(INSTALL) -D -m 0644 $(OTTERCAST_WEBINTERFACE_PKGDIR)/src/spotifyd $(TARGET_DIR)/etc/default/spotifyd
 	$(INSTALL) -D -m 0644 $(OTTERCAST_WEBINTERFACE_PKGDIR)/src/uhttpd $(TARGET_DIR)/etc/default/uhttpd
 
 	$(INSTALL) -D -m 0644 $(@D)/example_config.ini  $(BINARIES_DIR)/config.ini

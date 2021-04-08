@@ -1,1 +1,0 @@
-LIBRESPOT_ARGS= --device-type audiodongle --backend pulseaudio

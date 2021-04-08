@@ -1,0 +1,1 @@
+SPOTIFYD_ARGS= -B 320 -b pulseaudio --use-mpris true --no-daemon
