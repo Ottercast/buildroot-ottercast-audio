@@ -18,10 +18,6 @@
 
 	chosen {
 		stdout-path = "serial0:115200n8";
-
-		framebuffer-lcd {
-			status = "okay";
-		};
 	};
 
 	soc {
@@ -77,57 +73,6 @@
 		};
 	};
 
-	rgb_panel: rgb-panel {
-		compatible = "panel-dpi";
-		backlight = <&backlight>;
-		/* Handled by HW peripheral? */
-/*		enable-gpios = <&pio 3 19 GPIO_ACTIVE_HIGH>; */ /* PD19 */
-		pinctrl-names = "default";
-		pinctrl-0 = <&panel_pins>;
-		power-supply = <&vcc_3v3>;
-		height-mm = <34>;
-		width-mm = <81>;
-
-		panel-timing {
-			clock-frequency = <25000000>;
-			hactive = <800>;
-			hfront-porch = <10>;
-			hback-porch = <20>;
-			hsync-len = <4>;
-			hsync-active = <0>;
-			vactive = <340>;
-			vfront-porch = <8>;
-			vback-porch = <10>;
-			vsync-len = <4>;
-			vsync-active = <0>;
-			de-active = <1>;
-			pixelclk-active = <1>;
-		};
-
-		port {
-			lcd_in: endpoint {
-				remote-endpoint = <&tcon0_out_lcd>;
-			};
-		};
-/*
-		ports {
-			#address-cells = <1>;
-			#size-cells = <0>;
-
-			port@0 {
-				reg = <0>;
-				#address-cells = <1>;
-				#size-cells = <0>;
-
-				panel_in_rgb: endpoint@0 {
-					reg = <0>;
-					remote-endpoint = <&tcon0_out>;
-				};
-			};
-		};
-*/
-	};
-
         spi_lcd {
 		compatible = "spi-gpio";
 		#address-cells = <1>;
@@ -138,9 +83,20 @@
 		sck-gpios = <&pio 1 7 GPIO_ACTIVE_HIGH>; /* PB7 */
 		num-chipselects = <1>;
 
-		spidev@0 {
+		rgb-panel@0 {
 			reg = <0>;
-			compatible = "spidev";
+			compatible = "startek,kd35wvfpd107";
+			backlight = <&backlight>;
+			pinctrl-names = "default";
+			pinctrl-0 = <&panel_pins>;
+			VCCIO-supply = <&vcc_3v3>;
+			VCC-supply = <&vcc_3v3>;
+
+			port {
+				lcd_in: endpoint {
+					remote-endpoint = <&tcon0_out_lcd>;
+				};
+			};
 		};
 	};
 
