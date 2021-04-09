@@ -1,4 +1,4 @@
-From 649ac3d6382fb129a52a224e8eec8c1674d77203 Mon Sep 17 00:00:00 2001
+From 64b16ef705418e9c9e452c0f165fa001f377a449 Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@t-sys.eu>
 Date: Thu, 8 Apr 2021 01:37:01 +0200
 Subject: [PATCH 14/15] drm/panel: add driver for KD35WVFPD107 panel
@@ -50,7 +50,7 @@ index 2ba560bca61d..6611ffe2ee80 100644
  obj-$(CONFIG_DRM_PANEL_TPO_TD028TTEC1) += panel-tpo-td028ttec1.o
 diff --git a/drivers/gpu/drm/panel/panel-startek-kd35wvfpd107.c b/drivers/gpu/drm/panel/panel-startek-kd35wvfpd107.c
 new file mode 100644
-index 000000000000..5656ead8ca69
+index 000000000000..8420c674c62a
 --- /dev/null
 +++ b/drivers/gpu/drm/panel/panel-startek-kd35wvfpd107.c
 @@ -0,0 +1,280 @@
@@ -246,7 +246,7 @@ index 000000000000..5656ead8ca69
 +	drm_display_info_set_bus_formats(&connector->display_info,
 +					 &bus_format, 1);
 +	connector->display_info.bus_flags = DRM_BUS_FLAG_DE_LOW |
-+					    DRM_BUS_FLAG_PIXDATA_DRIVE_POSEDGE;
++					    DRM_BUS_FLAG_PIXDATA_SAMPLE_POSEDGE;
 +
 +	return 1;
 +}
