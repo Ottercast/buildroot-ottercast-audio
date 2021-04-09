@@ -1,0 +1,28 @@
+From f2dd5b182608512e481951864c0235ef6e464bb0 Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@manjaro.org>
+Date: Fri, 12 Feb 2021 01:33:10 +0100
+Subject: [PATCH 2/5] arm: sunxi: add soc node label
+
+The V3 dts is based on the V3s and needs to add some peripherals
+
+Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
+---
+ arch/arm/boot/dts/sun8i-v3s.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
+index 89286d3d35d1..308ba85f4661 100644
+--- a/arch/arm/boot/dts/sun8i-v3s.dtsi
++++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
+@@ -113,7 +113,7 @@ osc32k: osc32k_clk {
+ 		};
+ 	};
+ 
+-	soc {
++	soc: soc {
+ 		compatible = "simple-bus";
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+-- 
+2.30.1
+

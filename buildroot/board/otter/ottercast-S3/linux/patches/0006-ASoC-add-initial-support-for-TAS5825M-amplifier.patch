@@ -1,0 +1,955 @@
+From 1c0dcb7dd2892521f9e9ac1135a0d62b7b4f8c74 Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@t-sys.eu>
+Date: Sun, 21 Mar 2021 05:15:37 +0100
+Subject: [PATCH 6/6] ASoC: add initial support for TAS5825M amplifier
+
+The TAS5825M is a digital input, stereo Class-D audio amplifier. This
+commit adds a basic level of support for it.
+
+Signed-off-by: Tobias Schramm <t.schramm@t-sys.eu>
+---
+ .../devicetree/bindings/sound/tas5825m.yaml   |  61 ++
+ sound/soc/codecs/Kconfig                      |   8 +
+ sound/soc/codecs/Makefile                     |   2 +
+ sound/soc/codecs/tas5825m.c                   | 676 ++++++++++++++++++
+ sound/soc/codecs/tas5825m.h                   | 131 ++++
+ 5 files changed, 878 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/tas5825m.yaml
+ create mode 100644 sound/soc/codecs/tas5825m.c
+ create mode 100644 sound/soc/codecs/tas5825m.h
+
+diff --git a/Documentation/devicetree/bindings/sound/tas5825m.yaml b/Documentation/devicetree/bindings/sound/tas5825m.yaml
+new file mode 100644
+index 000000000000..7d3bcf4a47e3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/tas5825m.yaml
+@@ -0,0 +1,61 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) 2021 Tobias Schramm <t.schramm@manjaro.org>
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/sound/tas5825m.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Texas Instruments TAS5825M Digital Input Smart Stereo Amplifier
++
++maintainers:
++  - Tobias Schramm <t.schramm@manjaro.org>
++
++description: |
++  The TAS5825M is a stereo, digital imput Class-D audio amplifier with
++  advanced DSP capabilities. It is optimized to efficiently drive large
++  loudsepakers.
++
++properties:
++  compatible:
++    enum:
++      - ti,tas5825
++
++  reg:
++    maxItems: 1
++    description: |
++       I2C address of the device can be between 0x4c to 0x4f.
++
++  dvdd-supply:
++    description:
++      regulator phandle for the 3.3V VDD digital supply
++
++  pvdd-supply:
++    description:
++      regulator phandle for the main VDD amplifier power supply
++
++  '#sound-dai-cells':
++    const: 0
++
++required:
++  - compatible
++  - dvdd-supply
++  - pvdd-supply
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++   i2c0 {
++     #address-cells = <1>;
++     #size-cells = <0>;
++     codec: codec@4c {
++       compatible = "ti,tas5825m";
++       reg = <0x4c>;
++       #sound-dai-cells = <0>;
++       dvdd-supply = <&vcc_3v3>;
++       pvdd-supply = <&vbus>;
++     };
++   };
++
++...
+diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
+index 9bf6bfdaf11e..1f5232f534e4 100644
+--- a/sound/soc/codecs/Kconfig
++++ b/sound/soc/codecs/Kconfig
+@@ -204,6 +204,7 @@ config SND_SOC_ALL_CODECS
+ 	imply SND_SOC_TAS5086
+ 	imply SND_SOC_TAS571X
+ 	imply SND_SOC_TAS5720
++	imply SND_SOC_TAS5825M
+ 	imply SND_SOC_TAS6424
+ 	imply SND_SOC_TDA7419
+ 	imply SND_SOC_TFA9879
+@@ -1354,6 +1355,13 @@ config SND_SOC_TAS5720
+ 	  Enable support for Texas Instruments TAS5720L/M high-efficiency mono
+ 	  Class-D audio power amplifiers.
+ 
++config SND_SOC_TAS5825M
++	tristate "Texas Instruments TAS5825 Digital Input Smart Stereo Audio amplifier"
++	depends on I2C
++	help
++	  Enable support for Texas Instruments digital input Class-D Smart
++	  Audio Amplifier
++
+ config SND_SOC_TAS6424
+ 	tristate "Texas Instruments TAS6424 Quad-Channel Audio amplifier"
+ 	depends on I2C
+diff --git a/sound/soc/codecs/Makefile b/sound/soc/codecs/Makefile
+index d277f0366e09..aa611314f4a5 100644
+--- a/sound/soc/codecs/Makefile
++++ b/sound/soc/codecs/Makefile
+@@ -218,6 +218,7 @@ snd-soc-sti-sas-objs := sti-sas.o
+ snd-soc-tas5086-objs := tas5086.o
+ snd-soc-tas571x-objs := tas571x.o
+ snd-soc-tas5720-objs := tas5720.o
++snd-soc-tas5825m-objs := tas5825m.o
+ snd-soc-tas6424-objs := tas6424.o
+ snd-soc-tda7419-objs := tda7419.o
+ snd-soc-tas2770-objs := tas2770.o
+@@ -534,6 +535,7 @@ obj-$(CONFIG_SND_SOC_TAS2764)	+= snd-soc-tas2764.o
+ obj-$(CONFIG_SND_SOC_TAS5086)	+= snd-soc-tas5086.o
+ obj-$(CONFIG_SND_SOC_TAS571X)	+= snd-soc-tas571x.o
+ obj-$(CONFIG_SND_SOC_TAS5720)	+= snd-soc-tas5720.o
++obj-$(CONFIG_SND_SOC_TAS5825M)	+= snd-soc-tas5825m.o
+ obj-$(CONFIG_SND_SOC_TAS6424)	+= snd-soc-tas6424.o
+ obj-$(CONFIG_SND_SOC_TDA7419)	+= snd-soc-tda7419.o
+ obj-$(CONFIG_SND_SOC_TAS2770) += snd-soc-tas2770.o
+diff --git a/sound/soc/codecs/tas5825m.c b/sound/soc/codecs/tas5825m.c
+new file mode 100644
+index 000000000000..afcc460c1191
+--- /dev/null
++++ b/sound/soc/codecs/tas5825m.c
+@@ -0,0 +1,676 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * tas5825.c - ALSA SoC Texas Instruments TAS5825M digital input, smart
++ *             stereo audio amplifier
++ *
++ * Copyright (C)2021 Tobias Schramm <t.schramm@manjaro.org>
++ */
++
++#include <linux/module.h>
++#include <linux/errno.h>
++#include <linux/device.h>
++#include <linux/i2c.h>
++#include <linux/pm_runtime.h>
++#include <linux/regmap.h>
++#include <linux/slab.h>
++#include <linux/regulator/consumer.h>
++#include <linux/delay.h>
++
++#include <sound/pcm.h>
++#include <sound/pcm_params.h>
++#include <sound/soc.h>
++#include <sound/soc-dapm.h>
++#include <sound/tlv.h>
++
++#include "tas5825m.h"
++
++/* Define how often to check (and clear) the fault status register (in ms) */
++#define TAS5825M_FAULT_CHECK_INTERVAL 200
++
++static const char * const tas5825m_supply_names[] = {
++	"dvdd",		/* Digital power supply. Connect to 3.3-V supply. */
++	"pvdd",		/* Class-D amp and analog power supply (connected). */
++};
++
++#define TAS5825M_NUM_SUPPLIES	ARRAY_SIZE(tas5825m_supply_names)
++
++struct tas5825m_data {
++	struct snd_soc_component *component;
++	struct regmap *regmap;
++	struct i2c_client *tas5825m_client;
++	struct regulator_bulk_data supplies[TAS5825M_NUM_SUPPLIES];
++	struct delayed_work fault_check_work;
++	unsigned int last_chan_fault;
++	unsigned int last_global_fault1;
++	unsigned int last_global_fault2;
++};
++
++static int tas5825m_hw_params(struct snd_pcm_substream *substream,
++			     struct snd_pcm_hw_params *params,
++			     struct snd_soc_dai *dai)
++{
++	struct snd_soc_component *component = dai->component;
++	unsigned int rate = params_rate(params);
++	unsigned int format = params_format(params);
++	unsigned int fsmode;
++	unsigned int word_length;
++	int ret;
++
++	switch (rate) {
++	case 32000:
++	case 48000:
++	case 96000:
++	case 192000:
++		fsmode = 0;
++		break;
++	case 44100:
++		fsmode = 0b1000;
++		break;
++	case 88200:
++		fsmode = 0b1010;
++		break;
++	case 176400:
++		fsmode = 0b1100;
++		break;
++	default:
++		dev_err(component->dev, "unsupported sample rate: %u\n", rate);
++		return -EINVAL;
++	}
++
++	switch (format) {
++	case SNDRV_PCM_FORMAT_S16_LE:
++		word_length = 0b00;
++		break;
++	case SNDRV_PCM_FORMAT_S20_3LE:
++		word_length = 0b01;
++		break;
++	case SNDRV_PCM_FORMAT_S24_LE:
++		word_length = 0b10;
++		break;
++	case SNDRV_PCM_FORMAT_S32_LE:
++		word_length = 0b11;
++		break;		
++	default:
++		dev_err(component->dev, "unsupported format: %u\n", rate);
++		return -EINVAL;
++	}
++
++/*
++	Datasheets suggest setting fsmode for certain sample rates, but doing so 
++	seems to break those sample rates completely. Contrary to information
++	provided in the datasheet autodetection seems to work fine for those
++	rates.
++	ret = snd_soc_component_update_bits(component, TAS5825M_SIG_CH_CTRL,
++				  TAS5825M_FSMODE_MASK, fsmode);
++	if (ret < 0) {
++		dev_err(component->dev, "error setting sample rate: %d\n", ret);
++		return ret;
++	}
++*/
++
++	ret = snd_soc_component_update_bits(component, TAS5825M_SAP_CTRL1,
++				  TAS5825M_WORD_LENGTH_MASK, fsmode);
++	if (ret < 0) {
++		dev_err(component->dev, "error setting word length: %d\n", ret);
++		return ret;
++	}
++
++	return 0;
++}
++
++static int tas5825m_set_dai_fmt(struct snd_soc_dai *dai, unsigned int fmt)
++{
++	struct snd_soc_component *component = dai->component;
++	u8 data_format;
++	u8 sclk_inv;
++	int ret;
++
++	if ((fmt & SND_SOC_DAIFMT_MASTER_MASK) != SND_SOC_DAIFMT_CBS_CFS) {
++		dev_vdbg(component->dev, "DAI Format master is not found\n");
++		return -EINVAL;
++	}
++
++	switch (fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
++	case SND_SOC_DAIFMT_I2S:
++	case SND_SOC_DAIFMT_DSP_A:
++		data_format = TAS5825M_DATA_FORMAT_I2S;
++		break;
++	case SND_SOC_DAIFMT_DSP_B:
++	case SND_SOC_DAIFMT_LEFT_J:
++		data_format = TAS5825M_DATA_FORMAT_LTJ;
++		break;
++	case SND_SOC_DAIFMT_RIGHT_J:
++		data_format = TAS5825M_DATA_FORMAT_RTJ;
++		break;
++	default:
++		dev_vdbg(component->dev, "unsupported data format\n");
++		return -EINVAL;
++	}
++
++	switch (fmt & SND_SOC_DAIFMT_INV_MASK) {
++	case SND_SOC_DAIFMT_NB_NF:
++		sclk_inv = 0;
++		break;
++	case SND_SOC_DAIFMT_IB_NF:
++		sclk_inv = TAS5825M_SCLK_INV;
++		break;
++	default:
++		dev_vdbg(component->dev, "unsupported inversion mode\n");
++		return -EINVAL;
++
++	}
++
++	ret = snd_soc_component_update_bits(component, TAS5825M_DEVICE_CTRL1,
++				  TAS5825M_DATA_FORMAT_MASK,
++				  data_format);
++	if (ret < 0) {
++		dev_err(component->dev, "error setting data format: %d\n", ret);
++		return ret;
++	}
++
++	ret = snd_soc_component_update_bits(component, TAS5825M_I2S_CTRL,
++				  TAS5825M_SCLK_INV,
++				  sclk_inv);
++	if (ret < 0) {
++		dev_err(component->dev, "failed to set sclk inversion: %d\n", ret);
++		return ret;
++	}
++
++	return 0;
++}
++
++static int tas5825m_mute(struct snd_soc_dai *dai, int mute, int direction)
++{
++	struct snd_soc_component *component = dai->component;
++	int ret;
++
++	ret = snd_soc_component_update_bits(component, TAS5825M_DEVICE_CTRL2,
++				  TAS5825M_MUTE, mute ? TAS5825M_MUTE : 0);
++	if (ret < 0) {
++		dev_err(component->dev, "error (un-)muting device: %d\n", ret);
++		return ret;
++	}
++
++	return 0;
++}
++
++static void tas5825m_fault_check_work(struct work_struct *work)
++{
++	struct tas5825m_data *tas5825m = container_of(work, struct tas5825m_data,
++			fault_check_work.work);
++	struct device *dev = tas5825m->component->dev;
++	unsigned int curr_fault;
++	int ret;
++	bool recover = false;
++	bool fault_occured = false;
++
++	/* Handle channel fault register */
++	ret = regmap_read(tas5825m->regmap, TAS5825M_CHAN_FAULT, &curr_fault);
++	if (ret < 0) {
++		dev_err(dev, "failed to read CHAN_FAULT register: %d\n", ret);
++		goto out;
++	}
++
++	curr_fault &= TAS5825_CH2_OC_I | TAS5825_CH1_OC_I | TAS5825_CH2_DC_1 | TAS5825_CH1_DC_1;
++
++	if (curr_fault) {
++		fault_occured = true;
++		recover = true;
++	}
++
++	if ((curr_fault & TAS5825_CH2_OC_I) &&
++	    !(tas5825m->last_chan_fault & TAS5825_CH2_OC_I))
++		dev_crit(dev, "experienced channel 2 over-current fault");
++
++	if ((curr_fault & TAS5825_CH1_OC_I) &&
++	    !(tas5825m->last_chan_fault & TAS5825_CH1_OC_I))
++		dev_crit(dev, "experienced channel 1 over-current fault");
++
++	if ((curr_fault & TAS5825_CH2_DC_1) &&
++	    !(tas5825m->last_chan_fault & TAS5825_CH2_DC_1))
++		dev_crit(dev, "experienced channel 2 DC fault");
++
++	if ((curr_fault & TAS5825_CH1_DC_1) &&
++	    !(tas5825m->last_chan_fault & TAS5825_CH1_DC_1))
++		dev_crit(dev, "experienced channel 1 DC fault");
++
++	tas5825m->last_chan_fault = curr_fault;
++
++	/* Handle global fault register 1 */	
++	ret = regmap_read(tas5825m->regmap, TAS5825M_GLOBAL_FAULT1, &curr_fault);
++	if (ret < 0) {
++		dev_err(dev, "failed to read GLOBAL_FAULT1 register: %d\n", ret);
++		goto out;
++	}
++
++	curr_fault &= TAS5825M_CLK_FAULT_I | TAS5825M_PVDD_OV_I | TAS5825M_PVDD_UV_I;
++
++	if (curr_fault) {
++		fault_occured = true;
++	}
++
++	if ((curr_fault & TAS5825M_PVDD_OV_I) &&
++	    !(curr_fault & TAS5825M_PVDD_OV_I))
++		dev_crit(dev, "experienced PVDD overvoltage fault");
++
++	if ((curr_fault & TAS5825M_PVDD_UV_I) &&
++	    !(curr_fault & TAS5825M_PVDD_UV_I))
++		dev_crit(dev, "experienced PVDD undervoltage fault");
++
++	tas5825m->last_global_fault1 = curr_fault;
++
++	/* Handle global fault register 2 */	
++	ret = regmap_read(tas5825m->regmap, TAS5825M_GLOBAL_FAULT2, &curr_fault);
++	if (ret < 0) {
++		dev_err(dev, "failed to read GLOBAL_FAULT2 register: %d\n", ret);
++		goto out;
++	}
++
++	curr_fault &= TAS5825M_CBC_FAULT_CH2_I | TAS5825M_CBC_FAULT_CH1_I | TAS5825M_OTSD_I;
++
++	if ((curr_fault & TAS5825M_CBC_FAULT_CH2_I) &&
++	    !(tas5825m->last_chan_fault & TAS5825M_CBC_FAULT_CH2_I))
++		dev_crit(dev, "experienced channel 2 cycle by cycle overcurrent fault");
++
++	if ((curr_fault & TAS5825M_CBC_FAULT_CH1_I) &&
++	    !(tas5825m->last_chan_fault & TAS5825M_CBC_FAULT_CH1_I))
++		dev_crit(dev, "experienced channel 1 cycle by cycle overcurrent fault");
++
++	if ((curr_fault & TAS5825M_OTSD_I) &&
++	    !(tas5825m->last_chan_fault & TAS5825M_OTSD_I))
++		dev_crit(dev, "experienced over-temperature fault");
++
++	tas5825m->last_global_fault2 = curr_fault;
++
++	if (fault_occured) {
++		ret = regmap_write_bits(tas5825m->regmap, TAS5825M_FAULT_CLEAR,
++					TAS5825M_ANALOG_FAULT_CLEAR, TAS5825M_ANALOG_FAULT_CLEAR);
++		if (ret < 0)
++			dev_err(dev, "failed to write FAULT_CLEAR register: %d\n", ret);
++	}
++
++	if (recover) {
++		/*
++		 * Periodically toggle SDZ (shutdown bit) H->L->H to clear any latching
++		 * faults as long as a fault condition persists. Always going through
++		 * the full sequence no matter the first return value to minimizes
++		 * chances for the device to end up in shutdown mode.
++		 */
++		ret = regmap_write_bits(tas5825m->regmap, TAS5825M_DEVICE_CTRL2,
++					TAS5825M_CTRL_STATE_MASK, TAS5825M_CTRL_STATE_DEEP_SLEEP);
++		if (ret < 0)
++			dev_err(dev, "failed to write DEVICE_CTRL2 register: %d\n", ret);
++
++		ret = regmap_write_bits(tas5825m->regmap, TAS5825M_DEVICE_CTRL2,
++					TAS5825M_CTRL_STATE_MASK, TAS5825M_CTRL_STATE_PLAY);
++		if (ret < 0)
++			dev_err(dev, "failed to write DEVICE_CTRL2 register: %d\n", ret);
++	}
++
++out:
++	/* Schedule the next fault check at the specified interval */
++	schedule_delayed_work(&tas5825m->fault_check_work,
++			      msecs_to_jiffies(TAS5825M_FAULT_CHECK_INTERVAL));
++}
++
++static int tas5825m_codec_probe(struct snd_soc_component *component)
++{
++	struct tas5825m_data *tas5825m = snd_soc_component_get_drvdata(component);
++	unsigned int device_id;
++	int ret;
++
++	tas5825m->component = component;
++
++	ret = regulator_bulk_enable(ARRAY_SIZE(tas5825m->supplies),
++				    tas5825m->supplies);
++	if (ret != 0) {
++		dev_err(component->dev, "failed to enable supplies: %d\n", ret);
++		return ret;
++	}
++
++	/* Warn if chip identification is not what we expect */
++	ret = regmap_read(tas5825m->regmap, TAS5825M_DIE_ID, &device_id);
++	if (ret < 0) {
++		dev_err(component->dev, "failed to read device ID register: %d\n",
++			ret);
++		goto probe_fail;
++	}
++
++	if (device_id != TAS5825M_DIE_ID_ID)
++		dev_warn(component->dev, "wrong device ID. expected: %u read: %u\n",
++			 TAS5825M_DIE_ID_ID, device_id);
++
++	/* Set device to mute */
++	ret = snd_soc_component_update_bits(component, TAS5825M_DEVICE_CTRL2,
++				  TAS5825M_MUTE, TAS5825M_MUTE);
++	if (ret < 0)
++		goto error_snd_soc_component_update_bits;
++
++	/* Disable output data DSP processing */
++	ret = snd_soc_component_update_bits(component, TAS5825M_SDOUT_SEL,
++				  TAS5825M_SDOUT_SEL_PREPROCESSING,
++				  TAS5825M_SDOUT_SEL_PREPROCESSING);
++	if (ret < 0)
++		goto error_snd_soc_component_update_bits;	
++
++	/* Enter shutdown mode by default to minimize power consumption  */
++	ret = snd_soc_component_update_bits(component, TAS5825M_DEVICE_CTRL2,
++				  TAS5825M_CTRL_STATE_MASK,
++				  TAS5825M_CTRL_STATE_DEEP_SLEEP);
++	if (ret < 0)
++		goto error_snd_soc_component_update_bits;
++
++	INIT_DELAYED_WORK(&tas5825m->fault_check_work, tas5825m_fault_check_work);
++
++	return 0;
++
++error_snd_soc_component_update_bits:
++	dev_err(component->dev, "error configuring device registers: %d\n", ret);
++
++probe_fail:
++	regulator_bulk_disable(ARRAY_SIZE(tas5825m->supplies),
++			       tas5825m->supplies);
++	return ret;
++}
++
++static void tas5825m_codec_remove(struct snd_soc_component *component)
++{
++	struct tas5825m_data *tas5825m = snd_soc_component_get_drvdata(component);
++	int ret;
++
++	cancel_delayed_work_sync(&tas5825m->fault_check_work);
++
++	ret = regulator_bulk_disable(ARRAY_SIZE(tas5825m->supplies),
++				     tas5825m->supplies);
++	if (ret < 0)
++		dev_err(component->dev, "failed to disable supplies: %d\n", ret);
++};
++
++static int tas5825m_dac_event(struct snd_soc_dapm_widget *w,
++			     struct snd_kcontrol *kcontrol, int event)
++{
++	struct snd_soc_component *component = snd_soc_dapm_to_component(w->dapm);
++	struct tas5825m_data *tas5825m = snd_soc_component_get_drvdata(component);
++	int ret;
++
++	if (event & SND_SOC_DAPM_POST_PMU) {
++		/* Take TAS5825M out of shutdown mode */
++		ret = snd_soc_component_update_bits(component, TAS5825M_DEVICE_CTRL2,
++					  TAS5825M_CTRL_STATE_MASK, TAS5825M_CTRL_STATE_HIZ);
++		if (ret < 0) {
++			dev_err(component->dev, "error waking component: %d\n", ret);
++			return ret;
++		}
++
++		/* Allow clocks to stabilize */
++		msleep(80);
++
++		/* Enable DSP */
++		ret = snd_soc_component_update_bits(component, TAS5825M_DEVICE_CTRL2,
++					  TAS5825M_DIS_DSP,
++					  0);
++		if (ret < 0) {
++			dev_err(component->dev, "error waking DSP: %d\n", ret);
++			return ret;
++		}
++
++		/* Wait for DSP init */
++		msleep(10);
++
++		/* Take TAS5825M out of shutdown mode */
++		ret = snd_soc_component_update_bits(component, TAS5825M_DEVICE_CTRL2,
++					  TAS5825M_CTRL_STATE_MASK, TAS5825M_CTRL_STATE_PLAY);
++		if (ret < 0) {
++			dev_err(component->dev, "error starting to play: %d\n", ret);
++			return ret;
++		}
++
++		/* Turn on periodic fault checks */
++		tas5825m->last_chan_fault = 0;
++		tas5825m->last_global_fault1 = 0;
++		tas5825m->last_global_fault2 = 0;
++		schedule_delayed_work(&tas5825m->fault_check_work,
++				msecs_to_jiffies(TAS5825M_FAULT_CHECK_INTERVAL));
++	} else if (event & SND_SOC_DAPM_PRE_PMD) {
++		/* Disable TAS5825M periodic fault checking/handling */
++		cancel_delayed_work_sync(&tas5825m->fault_check_work);
++
++		/* Disable DSP */
++		ret = snd_soc_component_update_bits(component, TAS5825M_DEVICE_CTRL2,
++					  TAS5825M_DIS_DSP,
++					  TAS5825M_DIS_DSP);
++		if (ret < 0) {
++			dev_err(component->dev, "error waking DSP: %d\n", ret);
++			return ret;
++		}
++
++		msleep(10);
++
++		/* Place TAS5825M in shutdown mode to minimize current draw */
++		ret = snd_soc_component_update_bits(component, TAS5825M_DEVICE_CTRL2,
++					  TAS5825M_CTRL_STATE_MASK, TAS5825M_CTRL_STATE_DEEP_SLEEP);
++		if (ret < 0) {
++			dev_err(component->dev, "error shutting down component: %d\n",
++				ret);
++			return ret;
++		}
++	}
++
++	return 0;
++}
++
++#ifdef CONFIG_PM
++static int tas5825m_suspend(struct snd_soc_component *component)
++{
++	struct tas5825m_data *tas5825m = snd_soc_component_get_drvdata(component);
++	int ret;
++
++	regcache_cache_only(tas5825m->regmap, true);
++	regcache_mark_dirty(tas5825m->regmap);
++
++	ret = regulator_bulk_disable(ARRAY_SIZE(tas5825m->supplies),
++				     tas5825m->supplies);
++	if (ret < 0)
++		dev_err(component->dev, "failed to disable supplies: %d\n", ret);
++
++	return ret;
++}
++
++static int tas5825m_resume(struct snd_soc_component *component)
++{
++	struct tas5825m_data *tas5825m = snd_soc_component_get_drvdata(component);
++	int ret;
++
++	ret = regulator_bulk_enable(ARRAY_SIZE(tas5825m->supplies),
++				    tas5825m->supplies);
++	if (ret < 0) {
++		dev_err(component->dev, "failed to enable supplies: %d\n", ret);
++		return ret;
++	}
++
++	regcache_cache_only(tas5825m->regmap, false);
++
++	ret = regcache_sync(tas5825m->regmap);
++	if (ret < 0) {
++		dev_err(component->dev, "failed to sync regcache: %d\n", ret);
++		return ret;
++	}
++
++	return 0;
++}
++#else
++#define tas5825m_suspend NULL
++#define tas5825m_resume NULL
++#endif
++
++static bool tas5825m_is_volatile_reg(struct device *dev, unsigned int reg)
++{
++	switch (reg) {
++	case TAS5825M_POWER_STATE:
++	case TAS5825M_AUTOMUTE_STATE:
++	case TAS5825M_CHAN_FAULT:
++	case TAS5825M_GLOBAL_FAULT1:
++	case TAS5825M_GLOBAL_FAULT2:
++	case TAS5825M_WARNING:
++		return true;
++	default:
++		return false;
++	}
++}
++
++static const struct regmap_config tas5825m_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++
++	.max_register = TAS5825M_MAX_REG,
++	.cache_type = REGCACHE_RBTREE,
++	.volatile_reg = tas5825m_is_volatile_reg,
++};
++
++static const SNDRV_CTL_TLVD_DECLARE_DB_SCALE(pga_gain_tlv, SNDRV_CTL_TLVD_DB_SCALE_MUTE, 50, 2400);
++
++static const SNDRV_CTL_TLVD_DECLARE_DB_SCALE(again_tlv, -1550, 50, 0);
++
++static const struct snd_kcontrol_new tas5825m_snd_controls[] = {
++	SOC_SINGLE_TLV("Speaker Driver Playback Volume",
++		       TAS5825M_DIG_VOL, 0, 0xff, 0, pga_gain_tlv),
++	SOC_SINGLE_TLV("Speaker Driver Analog Gain", TAS5825M_AGAIN,
++		       0, 0x1f, 0, again_tlv),
++};
++
++static const struct snd_soc_dapm_widget tas5825m_dapm_widgets[] = {
++	SND_SOC_DAPM_AIF_IN("DAC IN", "Playback", 0, SND_SOC_NOPM, 0, 0),
++	SND_SOC_DAPM_DAC_E("DAC", NULL, SND_SOC_NOPM, 0, 0, tas5825m_dac_event,
++			   SND_SOC_DAPM_POST_PMU | SND_SOC_DAPM_PRE_PMD),
++	SND_SOC_DAPM_OUTPUT("OUTA"),
++	SND_SOC_DAPM_OUTPUT("OUTB"),
++};
++
++static const struct snd_soc_dapm_route tas5825m_audio_map[] = {
++	{ "DAC", NULL, "DAC IN" },
++	{ "OUTA", NULL, "DAC" },
++	{ "OUTB", NULL, "DAC" },
++};
++
++static const struct snd_soc_component_driver soc_component_dev_tas5825m = {
++	.probe			= tas5825m_codec_probe,
++	.remove			= tas5825m_codec_remove,
++	.suspend		= tas5825m_suspend,
++	.resume			= tas5825m_resume,
++	.controls		= tas5825m_snd_controls,
++	.num_controls		= ARRAY_SIZE(tas5825m_snd_controls),
++	.dapm_widgets		= tas5825m_dapm_widgets,
++	.num_dapm_widgets	= ARRAY_SIZE(tas5825m_dapm_widgets),
++	.dapm_routes		= tas5825m_audio_map,
++	.num_dapm_routes	= ARRAY_SIZE(tas5825m_audio_map),
++	.idle_bias_on		= 1,
++	.use_pmdown_time	= 1,
++	.endianness		= 1,
++	.non_legacy_dai_naming	= 1,
++};
++
++/* PCM rates supported by the TAS5825M */
++#define TAS5825M_RATES	(SNDRV_PCM_RATE_32000 | SNDRV_PCM_RATE_44100 |\
++			 SNDRV_PCM_RATE_48000 | SNDRV_PCM_RATE_88200 |\
++			 SNDRV_PCM_RATE_96000 | SNDRV_PCM_RATE_176400 |\
++			 SNDRV_PCM_RATE_192000)
++
++/* Formats supported by thr TAS5825M */
++#define TAS5825M_FORMATS (SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_S20_3LE |\
++			  SNDRV_PCM_FMTBIT_S24_LE | SNDRV_PCM_FMTBIT_S32_LE)
++
++static const struct snd_soc_dai_ops tas5825m_speaker_dai_ops = {
++	.hw_params	= tas5825m_hw_params,
++	.set_fmt	= tas5825m_set_dai_fmt,
++//	.set_tdm_slot	= tas5825m_set_dai_tdm_slot, TODO: implement
++	.mute_stream	= tas5825m_mute,
++	.no_capture_mute = 1,
++};
++
++static struct snd_soc_dai_driver tas5825m_dai[] = {
++	{
++		.name = "tas5825m-amplifier",
++		.playback = {
++			.stream_name = "Playback",
++			.channels_min = 1,
++			.channels_max = 2,
++			.rates = TAS5825M_RATES,
++			.formats = TAS5825M_FORMATS,
++		},
++		.ops = &tas5825m_speaker_dai_ops,
++	},
++};
++
++static int tas5825m_probe(struct i2c_client *client,
++			 const struct i2c_device_id *id)
++{
++	struct device *dev = &client->dev;
++	struct tas5825m_data *data;
++	int ret;
++	int i;
++
++	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->tas5825m_client = client;
++
++	data->regmap = devm_regmap_init_i2c(client, &tas5825m_regmap_config);
++	if (IS_ERR(data->regmap)) {
++		ret = PTR_ERR(data->regmap);
++		dev_err(dev, "failed to allocate register map: %d\n", ret);
++		return ret;
++	}
++
++	for (i = 0; i < ARRAY_SIZE(data->supplies); i++)
++		data->supplies[i].supply = tas5825m_supply_names[i];
++
++	ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(data->supplies),
++				      data->supplies);
++	if (ret != 0) {
++		dev_err(dev, "failed to request supplies: %d\n", ret);
++		return ret;
++	}
++
++	dev_set_drvdata(dev, data);
++
++	ret = devm_snd_soc_register_component(&client->dev,
++				&soc_component_dev_tas5825m,
++				tas5825m_dai,
++				ARRAY_SIZE(tas5825m_dai));
++	if (ret < 0) {
++		dev_err(dev, "failed to register component: %d\n", ret);
++		return ret;
++	}
++
++	return 0;
++}
++
++static const struct i2c_device_id tas5825m_id[] = {
++	{ "tas5825m", 0 },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, tas5825m_id);
++
++#if IS_ENABLED(CONFIG_OF)
++static const struct of_device_id tas5825m_of_match[] = {
++	{ .compatible = "ti,tas5825m", },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, tas5825m_of_match);
++#endif
++
++static struct i2c_driver tas5825m_i2c_driver = {
++	.driver = {
++		.name = "tas5825m",
++		.of_match_table = of_match_ptr(tas5825m_of_match),
++	},
++	.probe = tas5825m_probe,
++	.id_table = tas5825m_id,
++};
++
++module_i2c_driver(tas5825m_i2c_driver);
++
++MODULE_AUTHOR("Tobias Schramm <t.schramm@manjaro.org>");
++MODULE_DESCRIPTION("TAS5825M digital input audio amplifier driver");
++MODULE_LICENSE("GPL");
+diff --git a/sound/soc/codecs/tas5825m.h b/sound/soc/codecs/tas5825m.h
+new file mode 100644
+index 000000000000..1d0ed056cd32
+--- /dev/null
++++ b/sound/soc/codecs/tas5825m.h
+@@ -0,0 +1,131 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * tas5825.h - ALSA SoC Texas Instruments TAS5825M digital input, smart
++ *             stereo audio amplifier
++ *
++ * Copyright (C)2021 Tobias Schramm <t.schramm@manjaro.org>
++ */
++
++#ifndef __TAS5825M_H__
++#define __TAS5825M_H__
++
++/* Register Address Map */
++#define TAS5825M_RESET_CTRL		0x01
++#define TAS5825M_DEVICE_CTRL1		0x02
++#define TAS5825M_DEVICE_CTRL2		0x03
++#define TAS5825M_I2C_PAGE_AUTO_INC	0x0f
++#define TAS5825M_SIG_CH_CTRL		0x28
++#define TAS5825M_CLOCK_DET_CTRL		0x29
++#define TAS5825M_SDOUT_SEL		0x30
++#define TAS5825M_I2S_CTRL		0x31
++#define TAS5825M_SAP_CTRL1		0x33
++#define TAS5825M_SAP_CTRL2		0x34
++#define TAS5825M_SAP_CTRL3		0x35
++#define TAS5825M_FS_MON			0x37
++#define TAS5825M_BCK			0x38
++#define TAS5825M_CLKDET_STATUS		0x39
++#define TAS5825M_DSP_PGM_MODE		0x40
++#define TAS5825M_DSP_CTRL		0x46
++#define TAS5825M_DIG_VOL		0x4c
++#define TAS5825M_DIG_VOL_CTRL1		0x4e
++#define TAS5825M_DIG_VOL_CTRL2		0x4f
++#define TAS5825M_AUTO_MUTE_CTRL		0x50
++#define TAS5825M_AUTO_MUTE_TIME		0x51
++#define TAS5825M_ANA_CTRL		0x53
++#define TAS5825M_AGAIN			0x54
++#define TAS5825M_SPI_CLK		0x55
++#define TAS5825M_EEPROM_CTRL0		0x56
++#define TAS5825M_EEPROM_RD_CMD		0x57
++#define TAS5825M_EEPROM_ADDR_START0	0x58
++#define TAS5825M_EEPROM_ADDR_START1	0x59
++#define TAS5825M_EEPROM_ADDR_START2	0x5a
++#define TAS5825M_EEPROM_BOOT_STATUS	0x5b
++#define TAS5825M_BQ_WR_CTRL1		0x5c
++#define TAS5825M_PVDD_ADC		0x5e
++#define TAS5825M_GPIO_CTRL		0x60
++#define TAS5825M_GPIO0_SEL		0x61
++#define TAS5825M_GPIO1_SEL		0x62
++#define TAS5825M_GPIO2_SEL		0x63
++#define TAS5825M_GPIO_INPUT_SEL		0x64
++#define TAS5825M_GPIO_OUT		0x65
++#define TAS5825M_GPIO_OUT_INV		0x66
++#define TAS5825M_DIE_ID			0x67
++#define TAS5825M_POWER_STATE		0x68
++#define TAS5825M_AUTOMUTE_STATE		0x69
++#define TAS5825M_PHASE_CTRL		0x6a
++#define TAS5825M_SS_CTRL0		0x6b
++#define TAS5825M_SS_CTRL1		0x6c
++#define TAS5825M_SS_CTRL2		0x6d
++#define TAS5825M_SS_CTRL3		0x6e
++#define TAS5825M_SS_CTRL4		0x6f
++#define TAS5825M_CHAN_FAULT		0x70
++#define TAS5825M_GLOBAL_FAULT1		0x71
++#define TAS5825M_GLOBAL_FAULT2		0x72
++#define TAS5825M_WARNING		0x73
++#define TAS5825M_PIN_CONTROL1		0x74
++#define TAS5825M_PIN_CONTROL2		0x75
++#define TAS5825M_MISC_CONTROL		0x76
++#define TAS5825M_CBC_CONTROL		0x77
++#define TAS5825M_FAULT_CLEAR		0x78
++#define TAS5825M_MAX_REG		TAS5825M_FAULT_CLEAR
++
++
++/* TAS5825M_RESET_CTRL */
++#define TAS5825M_RST_REG		BIT(0)
++#define TAS5825M_RST_DIG_CORE		BIT(4)
++
++/* TAS5825M_DEVICE_CTRL1 */
++#define TAS5825M_DATA_FORMAT_MASK	GENMASK(5, 4)
++#define TAS5825M_DATA_FORMAT_I2S	(0x00 << 4)
++#define TAS5825M_DATA_FORMAT_TDM	(0x01 << 4)
++#define TAS5825M_DATA_FORMAT_RTJ	(0x02 << 4)
++#define TAS5825M_DATA_FORMAT_LTJ	(0x03 << 4)
++
++/* TAS5825M_DEVICE_CTRL2 */
++#define TAS5825M_DIS_DSP		BIT(4)
++#define TAS5825M_MUTE			BIT(3)
++#define TAS5825M_CTRL_STATE_MASK	GENMASK(1, 0)
++#define TAS5825M_CTRL_STATE_DEEP_SLEEP	0x00
++#define TAS5825M_CTRL_STATE_SLEEP	0x01
++#define TAS5825M_CTRL_STATE_HIZ		0x02
++#define TAS5825M_CTRL_STATE_PLAY	0x03
++
++/* TAS5825M_SIG_CH_CTRL */
++#define TAS5825M_SCLK_RATIO_CONF_MASK	GENMASK(7, 4)
++#define TAS5825M_FSMODE_MASK		GENMASK(3, 0)
++
++/* TAS5825M_SDOUT_SEL */
++#define TAS5825M_SDOUT_SEL_PREPROCESSING BIT(0)
++
++/* TAS5825M_I2S_CTRL */
++#define TAS5825M_SCLK_INV		BIT(5)
++
++/* TAS5825M_SAP_CTRL1 */
++#define TAS5825M_WORD_LENGTH_MASK	GENMASK(1, 0)
++
++/* TAS5825M_AGAIN */
++#define TAS5825M_ANA_GAIN_MASK		GENMASK(4, 0)
++
++/* TAS5825M_DIE_ID */
++#define TAS5825M_DIE_ID_ID		0b10010101
++
++/* TAS5825M_CHAN_FAULT */
++#define TAS5825_CH2_OC_I		BIT(0)
++#define TAS5825_CH1_OC_I		BIT(1)
++#define TAS5825_CH2_DC_1		BIT(2)
++#define TAS5825_CH1_DC_1		BIT(3)
++
++/* TAS5825M_GLOBAL_FAULT1 */
++#define TAS5825M_PVDD_UV_I		BIT(0)
++#define TAS5825M_PVDD_OV_I		BIT(1)
++#define TAS5825M_CLK_FAULT_I		BIT(2)
++
++/* TAS5825M_GLOBAL_FAULT2 */
++#define TAS5825M_OTSD_I			BIT(0)
++#define TAS5825M_CBC_FAULT_CH1_I	BIT(1)
++#define TAS5825M_CBC_FAULT_CH2_I	BIT(2)
++
++/* TAS5825M_FAULT_CLEAR */
++#define TAS5825M_ANALOG_FAULT_CLEAR	BIT(7)
++
++#endif /* __TAS5825M_H__ */
+-- 
+2.30.1
+

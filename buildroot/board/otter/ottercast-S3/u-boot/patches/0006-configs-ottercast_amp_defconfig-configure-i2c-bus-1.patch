@@ -1,0 +1,30 @@
+From c8c4ba720567f94b9bdfc5fdb5a327c69fd98bcb Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@t-sys.eu>
+Date: Fri, 9 Apr 2021 17:56:33 +0200
+Subject: [PATCH 6/6] configs: ottercast_amp_defconfig: configure i2c bus 1
+
+Previously access to i2c devices was not possible from u-boot. This change
+allows to distinguish OtterCast Audio and OtterCast Amp via the devices
+present on I2C bus 1.
+---
+ configs/ottercast_amp_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/configs/ottercast_amp_defconfig b/configs/ottercast_amp_defconfig
+index 707b83610d..b893c04eab 100644
+--- a/configs/ottercast_amp_defconfig
++++ b/configs/ottercast_amp_defconfig
+@@ -5,7 +5,10 @@ CONFIG_MACH_SUN8I_V3S=y
+ CONFIG_SUNXI_DRAM_DDR3_1333=y
+ CONFIG_DRAM_CLK=504
+ CONFIG_DRAM_ODT_EN=y
++CONFIG_I2C1_ENABLE=y
+ CONFIG_DEFAULT_DEVICE_TREE="sun8i-s3-ottercast-amp"
++CONFIG_DM_I2C=y
++CONFIG_I2C_SET_DEFAULT_BUS_NUM=y
+ CONFIG_LED=y
+ CONFIG_LED_BLINK=y
+ CONFIG_LED_GPIO=y
+-- 
+2.30.1
+

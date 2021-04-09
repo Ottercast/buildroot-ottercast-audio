@@ -1,0 +1,43 @@
+From 0d772940e97b0b7e48e477962b92468090e5ac5c Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@t-sys.eu>
+Date: Thu, 8 Apr 2021 01:46:17 +0200
+Subject: [PATCH 15/15] spi: spi-bitbang: honor change in SPI mode between
+ transfers
+
+Preiously the SPI mode on a slave device was only checked once during
+initial setup. This may however be too early to catch the SPI mode set
+by a SPI slave driver.
+Fix that by re-evaluating the SPI mode in the prepare phase of each
+transfer.
+
+Signed-off-by: Tobias Schramm <t.schramm@t-sys.eu>
+---
+ drivers/spi/spi-bitbang.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/spi/spi-bitbang.c b/drivers/spi/spi-bitbang.c
+index 1a7352abd878..40c63b31948e 100644
+--- a/drivers/spi/spi-bitbang.c
++++ b/drivers/spi/spi-bitbang.c
+@@ -140,6 +140,7 @@ int spi_bitbang_setup_transfer(struct spi_device *spi, struct spi_transfer *t)
+ 	struct spi_bitbang_cs	*cs = spi->controller_state;
+ 	u8			bits_per_word;
+ 	u32			hz;
++	struct spi_bitbang	*bitbang = spi_master_get_devdata(spi->master);
+ 
+ 	if (t) {
+ 		bits_per_word = t->bits_per_word;
+@@ -149,6 +150,10 @@ int spi_bitbang_setup_transfer(struct spi_device *spi, struct spi_transfer *t)
+ 		hz = 0;
+ 	}
+ 
++	cs->txrx_word = bitbang->txrx_word[spi->mode & (SPI_CPOL|SPI_CPHA)];
++	if (!cs->txrx_word)
++		return -EINVAL;
++
+ 	/* spi_transfer level calls that work per-word */
+ 	if (!bits_per_word)
+ 		bits_per_word = spi->bits_per_word;
+-- 
+2.30.1
+

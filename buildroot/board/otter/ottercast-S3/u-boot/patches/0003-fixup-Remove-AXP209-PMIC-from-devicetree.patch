@@ -1,0 +1,168 @@
+From c5517a45540277a263b5831e5eda005f50018947 Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@t-sys.eu>
+Date: Wed, 10 Feb 2021 19:15:44 +0100
+Subject: [PATCH 3/6] fixup: Remove AXP209 PMIC from devicetree
+
+While there is technically an AXP209 on the baord it is
+not connected to any of the I2C busses. Thus it has been
+replaced by a set of fixed voltage regulators.
+---
+ arch/arm/dts/sun8i-s3-ottercast-audio-v2.dts | 98 ++++++++------------
+ configs/ottercast_audio_v2_defconfig         |  7 --
+ 2 files changed, 37 insertions(+), 68 deletions(-)
+
+diff --git a/arch/arm/dts/sun8i-s3-ottercast-audio-v2.dts b/arch/arm/dts/sun8i-s3-ottercast-audio-v2.dts
+index 5442fa8208..a6896c3fdd 100644
+--- a/arch/arm/dts/sun8i-s3-ottercast-audio-v2.dts
++++ b/arch/arm/dts/sun8i-s3-ottercast-audio-v2.dts
+@@ -35,6 +35,38 @@
+ 		};
+ 	};
+ 
++	dcdc_1v1: dcdc-1v1 {
++		compatible = "regulator-fixed";
++		regulator-always-on;
++		regulator-name = "dcdc-3v3";
++		regulator-min-microvolt = <1100000>;
++		regulator-max-microvolt = <1100000>;
++	};
++
++	dcdc_3v3: dcdc-3v3 {
++		compatible = "regulator-fixed";
++		regulator-always-on;
++		regulator-name = "dcdc-3v3";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++	};
++
++	ldo_rtc: ldo-rtc {
++		compatible = "regulator-fixed";
++		regulator-always-on;
++		regulator-name = "ldo-rtc";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++	};
++
++	ldo_3v0: ldo-3v0 {
++		compatible = "regulator-fixed";
++		regulator-always-on;
++		regulator-name = "ldo-3v0";
++		regulator-min-microvolt = <3000000>;
++		regulator-max-microvolt = <3000000>;
++	};
++
+ 	wifi_pwrseq: wifi_pwrseq {
+ 		compatible = "mmc-pwrseq-simple";
+ 		reset-gpios = <&pio 4 19 GPIO_ACTIVE_LOW>; /* PE19 WL-PMU-EN */
+@@ -48,45 +80,20 @@
+ 	status = "okay";
+ };
+ 
+-&i2c0 {
+-	status = "okay";
+-
+-	axp209: pmic@34 {
+-		compatible = "x-powers,axp203",
+-			     "x-powers,axp209";
+-		reg = <0x34>;
+-		interrupt-controller;
+-		#interrupt-cells = <1>;
+-	};
+-};
+-
+ &i2c1 {
+ 	status = "okay";
+ };
+ 
+-&lradc {
+-	vref-supply = <&reg_ldo2>;
+-	status = "okay";
+-/*
+-	button-200 {
+-		label = "Setup";
+-		linux,code = <KEY_SETUP>;
+-		channel = <0>;
+-		voltage = <190000>;
+-	};
+-*/
+-};
+-
+ &mmc0 {
+-	vmmc-supply = <&reg_dcdc3>;
++	vmmc-supply = <&dcdc_3v3>;
+ 	bus-width = <4>;
+ 	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;
+ 	status = "okay";
+ };
+ 
+ &mmc1 {
+-	vmmc-supply = <&reg_dcdc3>;
+-	vqmmc-supply = <&reg_dcdc3>;
++	vmmc-supply = <&dcdc_3v3>;
++	vqmmc-supply = <&dcdc_3v3>;
+ 	mmc-pwrseq = <&wifi_pwrseq>;
+ 	bus-width = <4>;
+ 	non-removable;
+@@ -94,39 +101,8 @@
+ };
+ 
+ &pio {
+-	vcc-pd-supply = <&reg_dcdc3>;
+-	vcc-pe-supply = <&reg_ldo3>;
+-};
+-
+-#include "axp209.dtsi"
+-
+-&ac_power_supply {
+-	status = "okay";
+-};
+-
+-&reg_dcdc2 {
+-	regulator-always-on;
+-	regulator-min-microvolt = <1100000>;
+-	regulator-max-microvolt = <1100000>;
+-	regulator-name = "vdd-sys-cpu-ephy";
+-};
+-
+-&reg_dcdc3 {
+-	regulator-always-on;
+-	regulator-min-microvolt = <3300000>;
+-	regulator-max-microvolt = <3300000>;
+-	regulator-name = "vcc-3v3";
+-};
+-
+-&reg_ldo1 {
+-	regulator-name = "vdd-rtc";
+-};
+-
+-&reg_ldo2 {
+-	regulator-always-on;
+-	regulator-min-microvolt = <3000000>;
+-	regulator-max-microvolt = <3000000>;
+-	regulator-name = "avcc";
++	vcc-pd-supply = <&dcdc_3v3>;
++	vcc-pe-supply = <&dcdc_3v3>;
+ };
+ 
+ &uart1 {
+diff --git a/configs/ottercast_audio_v2_defconfig b/configs/ottercast_audio_v2_defconfig
+index 9283e6ed0c..263e54811f 100644
+--- a/configs/ottercast_audio_v2_defconfig
++++ b/configs/ottercast_audio_v2_defconfig
+@@ -5,13 +5,6 @@ CONFIG_MACH_SUN8I_V3S=y
+ CONFIG_SUNXI_DRAM_DDR3_1333=y
+ CONFIG_DRAM_CLK=504
+ CONFIG_DRAM_ODT_EN=y
+-CONFIG_I2C0_ENABLE=y
+ CONFIG_DEFAULT_DEVICE_TREE="sun8i-s3-ottercast-audio-v2"
+-CONFIG_SPL_I2C_SUPPORT=y
+ # CONFIG_NETDEVICES is not set
+-CONFIG_AXP209_POWER=y
+-CONFIG_AXP_DCDC2_VOLT=1100
+-CONFIG_AXP_DCDC3_VOLT=3300
+-CONFIG_AXP_ALDO2_VOLT=3000
+-CONFIG_AXP_ALDO3_VOLT=0
+ CONFIG_CONS_INDEX=2
+-- 
+2.30.1
+
