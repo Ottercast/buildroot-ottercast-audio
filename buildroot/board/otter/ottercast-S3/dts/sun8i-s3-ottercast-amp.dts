@@ -51,6 +51,7 @@
 
 	backlight: backlight {
 		compatible = "pwm-backlight";
+		default-brightness-level = <4095>;
 		power-supply = <&vcc_3v3>;
 		pinctrl-0 = <&backlight_pwm_pin>;
 		pinctrl-names = "default";
