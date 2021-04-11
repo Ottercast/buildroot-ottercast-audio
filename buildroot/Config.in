@@ -7,3 +7,4 @@ source "$BR2_EXTERNAL_OTTERCASTAUDIO_PATH/package/ottercast_webinterface/Config.
 source "$BR2_EXTERNAL_OTTERCASTAUDIO_PATH/package/shairport_sync_systemd_service/Config.in"
 source "$BR2_EXTERNAL_OTTERCASTAUDIO_PATH/package/uhttpd_systemd_service/Config.in"
 source "$BR2_EXTERNAL_OTTERCASTAUDIO_PATH/package/snapcast/Config.in"
+source "$BR2_EXTERNAL_OTTERCASTAUDIO_PATH/package/shairport_sync_pulseaudio/Config.in"
