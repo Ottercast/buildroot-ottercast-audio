@@ -206,3 +206,12 @@
 		function = "uart2";
 	};
 };
+
+&usb_otg {
+	dr_mode = "peripheral";
+	status = "okay";
+};
+
+&usbphy {
+	status = "okay";
+};

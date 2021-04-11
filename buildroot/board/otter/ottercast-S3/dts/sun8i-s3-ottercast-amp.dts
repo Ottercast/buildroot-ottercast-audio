@@ -361,3 +361,12 @@
 		remote-endpoint = <&lcd_in>;
 	};
 };
+
+&usb_otg {
+	dr_mode = "peripheral";
+	status = "okay";
+};
+
+&usbphy {
+	status = "okay";
+};

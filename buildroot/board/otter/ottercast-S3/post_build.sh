@@ -26,5 +26,8 @@ ln -fs /tmp/resolv.conf "$TARGET_DIR"/etc/resolv.conf
 
 ln -fs /tmp/hostname "$TARGET_DIR"/etc/hostname
 
+ln -fs /tmp/system.pa "$TARGET_DIR"/etc/pulse/system.pa
+ln -fs /tmp/daemon.conf "$TARGET_DIR"/etc/pulse/daemon.conf
+
 mkdir -p "$TARGET_DIR"/root/.config/pulse
 mkdir -p "$TARGET_DIR"/var/lib/pulse
