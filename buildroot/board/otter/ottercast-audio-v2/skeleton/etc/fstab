@@ -1,3 +1,0 @@
-/dev/root / auto ro 0 1
-tmpfs  /var/lib/pulse  tmpfs  auto,noatime,size=1m,uid=1002,gid=1002,mode=0700  0  0
-tmpfs  /root/.config/pulse  tmpfs  auto,noatime,size=1m,uid=0,gid=0,mode=0700  0  0
