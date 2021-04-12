@@ -1,0 +1,20 @@
+[Unit]
+Description=Network Connectivity
+Wants=network.target
+Before=network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+
+# This file exists upstream, but contains a flush for the 
+# lo-Interface. This causes lo not to have an IP address.
+# https://bugs.busybox.net/show_bug.cgi?id=11001
+# 
+# This flush was removed here.
+
+ExecStart=/sbin/ifup -a
+ExecStop=/sbin/ifdown -a
+
+[Install]
+WantedBy=multi-user.target

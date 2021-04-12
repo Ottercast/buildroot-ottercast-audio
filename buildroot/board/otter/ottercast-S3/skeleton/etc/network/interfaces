@@ -1,4 +1,5 @@
 auto lo
+allow-hotplug lo
 iface lo inet loopback
 
 auto wlan0
