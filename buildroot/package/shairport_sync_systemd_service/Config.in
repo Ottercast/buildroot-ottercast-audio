@@ -1,6 +1,6 @@
 config BR2_PACKAGE_SHAIRPORT_SYNC_SYSTEMD_SERVICE
 	bool "Systemd unit file for shairport-sync"
-	depends on BR2_PACKAGE_SHAIRPORT_SYNC
+	depends on BR2_PACKAGE_SHAIRPORT_SYNC_PULSEAUDIO
 	depends on BR2_PACKAGE_SYSTEMD
 	help
 	  Provides a systemd unit file for shairport-sync

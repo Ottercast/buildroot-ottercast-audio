@@ -24,6 +24,7 @@ define OTTERCAST_WEBINTERFACE_INSTALL_TARGET_CMDS
 	mkdir -p $(TARGET_DIR)/etc/wpa_supplicant/
 	$(INSTALL) -D -m 0644 $(OTTERCAST_WEBINTERFACE_PKGDIR)/src/spotifyd $(TARGET_DIR)/etc/default/spotifyd
 	$(INSTALL) -D -m 0644 $(OTTERCAST_WEBINTERFACE_PKGDIR)/src/uhttpd $(TARGET_DIR)/etc/default/uhttpd
+	$(INSTALL) -D -m 0644 $(OTTERCAST_WEBINTERFACE_PKGDIR)/src/shairport-sync $(TARGET_DIR)/etc/default/shairport-sync
 
 	$(INSTALL) -D -m 0644 $(@D)/example_config.ini  $(BINARIES_DIR)/config.ini
 endef
