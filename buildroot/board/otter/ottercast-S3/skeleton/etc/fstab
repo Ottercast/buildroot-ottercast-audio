@@ -1,3 +1,4 @@
 /dev/root / auto ro 0 1
 tmpfs  /var/lib/pulse  tmpfs  auto,noatime,size=1m,uid=1002,gid=1002,mode=0700  0  0
 tmpfs  /root/.config/pulse  tmpfs  auto,noatime,size=1m,uid=0,gid=0,mode=0700  0  0
+tmpfs  /var/lib/systemd/timesync  tmpfs  auto,noatime,size=5m,mode=0755,uid=1004,gid=1005  0  0

@@ -31,3 +31,4 @@ ln -fs /tmp/daemon.conf "$TARGET_DIR"/etc/pulse/daemon.conf
 
 mkdir -p "$TARGET_DIR"/root/.config/pulse
 mkdir -p "$TARGET_DIR"/var/lib/pulse
+mkdir -p "$TARGET_DIR"/var/lib/systemd/timesync

@@ -7,11 +7,9 @@ Before=network.target
 Type=oneshot
 RemainAfterExit=yes
 
-# This file exists upstream, but contains a flush for the 
-# lo-Interface. This causes lo not to have an IP address.
+# This flush causes lo not to have an IP address.
 # https://bugs.busybox.net/show_bug.cgi?id=11001
-# 
-# This flush was removed here.
+#ExecStart=/sbin/ip addr flush dev lo
 
 ExecStart=/sbin/ifup -a
 ExecStop=/sbin/ifdown -a
