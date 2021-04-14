@@ -1,0 +1,18 @@
+[Unit]
+Description=Network Connectivity
+Wants=network.target
+Before=network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+
+# This flush causes lo not to have an IP address.
+# https://bugs.busybox.net/show_bug.cgi?id=11001
+#ExecStart=/sbin/ip addr flush dev lo
+
+ExecStart=/sbin/ifup -a
+ExecStop=/sbin/ifdown -a
+
+[Install]
+WantedBy=multi-user.target
