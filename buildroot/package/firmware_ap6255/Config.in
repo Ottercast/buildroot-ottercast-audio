@@ -1,0 +1,4 @@
+config BR2_PACKAGE_FIRMWARE_AP6255
+	bool "Firmware for AMPAK AP6255"
+	help
+	  Firmware for the AP6255 (BCM4345/6 + BCM4345C0)
