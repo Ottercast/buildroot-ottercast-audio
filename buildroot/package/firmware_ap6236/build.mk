@@ -10,7 +10,7 @@ define FIRMWARE_AP6236_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 644 $(@D)/brcmfmac43430-sdio.bin \
 		$(TARGET_DIR)/usr/lib/firmware/brcm/brcmfmac43430-sdio.bin
 	$(INSTALL) -D -m 644 $(@D)/BCM4343B0.hcd \
-		$(TARGET_DIR)/usr/lib/firmware/brcm/BCM4343B0.hcd
+		$(TARGET_DIR)/usr/lib/firmware/brcm/BCM.hcd
 endef
 
 $(eval $(generic-package))
