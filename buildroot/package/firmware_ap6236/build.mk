@@ -1,13 +1,16 @@
 
-FIRMWARE_AP6236_VERSION = 1.1.1
-FIRMWARE_AP6236_LICENSE = Proprietary
-FIRMWARE_AP6236_SOURCE =
-FIRMWARE_AP6236_SITE =
+FIRMWARE_AP6236_VERSION = 1.0.0
+FIRMWARE_AP6236_LICENSE = Redistributable
+FIRMWARE_AP6236_LICENSE_FILES = LICENSE
+FIRMWARE_AP6236_SITE = $(call github,OtterCast,broadcom-firmware,v$(FIRMWARE_AP6236_VERSION))
 
 define FIRMWARE_AP6236_INSTALL_TARGET_CMDS
-	$(INSTALL) -D -m 644 $(FIRMWARE_AP6236_PKGDIR)/firmware/nvram_ap6236.txt $(TARGET_DIR)/usr/lib/firmware/brcm/brcmfmac43430-sdio.txt
-	$(INSTALL) -D -m 644 $(FIRMWARE_AP6236_PKGDIR)/firmware/fw_bcm43436b0.bin $(TARGET_DIR)/usr/lib/firmware/brcm/brcmfmac43430-sdio.bin
-	$(INSTALL) -D -m 644 $(FIRMWARE_AP6236_PKGDIR)/firmware/BCM4343B0.hcd $(TARGET_DIR)/usr/lib/firmware/brcm/BCM.hcd
+	$(INSTALL) -D -m 644 $(@D)/brcmfmac43430-sdio.txt \
+		$(TARGET_DIR)/usr/lib/firmware/brcm/brcmfmac43430-sdio.txt
+	$(INSTALL) -D -m 644 $(@D)/brcmfmac43430-sdio.bin \
+		$(TARGET_DIR)/usr/lib/firmware/brcm/brcmfmac43430-sdio.bin
+	$(INSTALL) -D -m 644 $(@D)/BCM4343B0.hcd \
+		$(TARGET_DIR)/usr/lib/firmware/brcm/BCM4343B0.hcd
 endef
 
 $(eval $(generic-package))
