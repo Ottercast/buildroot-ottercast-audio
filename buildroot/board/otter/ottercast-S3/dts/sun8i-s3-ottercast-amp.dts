@@ -169,19 +169,20 @@
 		simple-audio-card,widgets =
 			"Speaker", "Speaker";
 		simple-audio-card,routing =
-			"Speaker", "OUTA",
-			"Speaker", "OUTB";
+			"Speaker", "main OUTA",
+			"Speaker", "main OUTB",
+			"Speaker", "woofer OUTA",
+			"Speaker", "woofer OUTB";
 		dailink0_master: simple-audio-card,cpu {
 			sound-dai = <&i2s0>;
 		};
-		simple-audio-card,codec {
+		simple-audio-card,codec@0 {
 			sound-dai = <&tas_main>;
 		};
-/*
-		simple-audio-card,codec {
+
+		simple-audio-card,codec@1 {
 			sound-dai = <&tas_woofer>;
 		};
-*/
 	};
 
 	wifi_pwrseq: wifi_pwrseq {
@@ -222,6 +223,7 @@
 		dvdd-supply = <&vcc_3v3>;
 		pvdd-supply = <&vcc_vbus>;
 		shutdown-gpios = <&pio 4 7 GPIO_ACTIVE_HIGH>;
+		sound-name-prefix = "main";
 		tas5825m,gpio2-func = "sdout";
 	};
 
@@ -232,6 +234,7 @@
 		dvdd-supply = <&vcc_3v3>;
 		pvdd-supply = <&vcc_vbus>;
 		shutdown-gpios = <&pio 4 8 GPIO_ACTIVE_HIGH>;
+		sound-name-prefix = "woofer";
 	};
 
 	lm75@48 {
