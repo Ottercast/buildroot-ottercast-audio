@@ -1,0 +1,57 @@
+From b86f8815495a64e7c2bfa74b374a65d4c15cf75c Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@t-sys.eu>
+Date: Sat, 17 Apr 2021 02:57:54 +0200
+Subject: [PATCH 19/19] ASoC: soc: codec: tas5825m: enable gpio output driver
+ for alternate functions
+
+When selecting an alternate function for a GPIO on the TAS6825M the
+corresponding output driver must be enabled, too. Previously the driver did
+not do that.
+Fix it by setting the output enable bits in GPIO_CTRL.
+---
+ sound/soc/codecs/tas5825m.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/sound/soc/codecs/tas5825m.c b/sound/soc/codecs/tas5825m.c
+index 08f5ef678245..0e702635b10e 100644
+--- a/sound/soc/codecs/tas5825m.c
++++ b/sound/soc/codecs/tas5825m.c
+@@ -129,11 +129,6 @@ static int tas5825m_set_dai_fmt(struct snd_soc_dai *dai, unsigned int fmt)
+ 	u8 sclk_inv;
+ 	int ret;
+ 
+-	if ((fmt & SND_SOC_DAIFMT_MASTER_MASK) != SND_SOC_DAIFMT_CBS_CFS) {
+-		dev_vdbg(component->dev, "DAI Format master is not found\n");
+-		return -EINVAL;
+-	}
+-
+ 	switch (fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
+ 	case SND_SOC_DAIFMT_I2S:
+ 	case SND_SOC_DAIFMT_DSP_A:
+@@ -815,7 +810,7 @@ static int tas5825m_gpio_init(struct tas5825m_data *tas) {
+ 
+ 		err = of_property_read_string(dev->of_node, propname, &funcname);
+ 		if (err) {
+-			dev_err(dev, "failed to read property %s\n", propname);
++			dev_err(dev, "failed to read property %s: %d\n", propname, err);
+ 			return err;
+ 		}
+ 
+@@ -827,7 +822,13 @@ static int tas5825m_gpio_init(struct tas5825m_data *tas) {
+ 
+ 		err = regmap_write(tas->regmap, TAS5825M_GPIO0_SEL + i, mux);
+ 		if (err < 0) {
+-			dev_err(dev, "failed to write mux setting 0x%02x for gpio%d\n", mux, i);
++			dev_err(dev, "failed to write mux setting 0x%02x for gpio%d: %d\n", mux, i, err);
++			return err;
++		}
++
++		err = regmap_write_bits(tas->regmap, TAS5825M_GPIO_CTRL, BIT(i), BIT(i));
++		if (err < 0) {
++			dev_err(dev, "failed to set output enable flag for gpio%d: %d\n", i, err);
+ 			return err;
+ 		}
+ 	}
+-- 
+2.30.1
+
