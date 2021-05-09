@@ -1,0 +1,7 @@
+config BR2_PACKAGE_OTTERCAST_FRONTEND
+		bool "OtterCast Frontend"
+		select BR2_PACKAGE_DBUS
+		select BR2_PACKAGE_IMAGEMAGICK
+		select BR2_PACKAGE_LIBCURL
+		help
+			Ottercast Frontend
