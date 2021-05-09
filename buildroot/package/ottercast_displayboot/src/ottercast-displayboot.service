@@ -1,0 +1,11 @@
+[Unit]
+Description=Ottercast Displayboot
+DefaultDependencies=no
+Before=basic.target
+
+[Service]
+ExecStart=/opt/ottercast-displayboot/displayboot
+WorkingDirectory=/opt/ottercast-displayboot
+
+[Install]
+WantedBy=sysinit.target
