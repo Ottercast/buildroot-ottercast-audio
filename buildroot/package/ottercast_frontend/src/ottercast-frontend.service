@@ -1,0 +1,15 @@
+[Unit]
+Description=Ottercast Frontend
+After=sound.target
+After=avahi-daemon.service
+Wants=network-online.target
+After=network.target network-online.target 
+
+[Service]
+EnvironmentFile=-/etc/default/ottercast-frontend
+EnvironmentFile=-/tmp/dbus-session
+ExecStart=/opt/ottercast-frontend/ottercast-frontend $OTTERCAST_FRONTEND_ARGS
+WorkingDirectory=/opt/ottercast-frontend
+
+[Install]
+WantedBy=multi-user.target

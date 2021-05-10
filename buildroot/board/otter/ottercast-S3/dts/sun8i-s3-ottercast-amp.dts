@@ -79,9 +79,9 @@
 		#address-cells = <1>;
 		ranges;
 
-		cs-gpios = <&pio 1 6 GPIO_ACTIVE_HIGH>; /* PB6 */
-		mosi-gpios = <&pio 1 9 GPIO_ACTIVE_HIGH>; /* PB9 */
-		sck-gpios = <&pio 1 7 GPIO_ACTIVE_HIGH>; /* PB7 */
+		cs-gpios = <&pio 1 9 GPIO_ACTIVE_HIGH>; /* PB9 */
+		mosi-gpios = <&pio 1 7 GPIO_ACTIVE_HIGH>; /* PB7 */
+		sck-gpios = <&pio 1 6 GPIO_ACTIVE_HIGH>; /* PB6 */
 		num-chipselects = <1>;
 
 		rgb-panel@0 {
