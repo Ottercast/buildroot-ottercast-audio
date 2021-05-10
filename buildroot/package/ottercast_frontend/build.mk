@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-OTTERCAST_FRONTEND_VERSION = 0.1.1
+OTTERCAST_FRONTEND_VERSION = 0.1.2
 OTTERCAST_FRONTEND_LICENSE = MIT
 OTTERCAST_FRONTEND_LICENSE_FILES = LICENSE
 OTTERCAST_FRONTEND_SITE = $(call github,Ottercast,frontend,v$(OTTERCAST_FRONTEND_VERSION))
