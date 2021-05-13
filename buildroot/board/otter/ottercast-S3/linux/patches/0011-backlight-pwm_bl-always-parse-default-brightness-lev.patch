@@ -1,18 +1,17 @@
-From e553c841a539e9f4e3847ca3467e4ce92107e394 Mon Sep 17 00:00:00 2001
-From: Tobias Schramm <t.schramm@t-sys.eu>
-Date: Fri, 9 Apr 2021 21:15:29 +0200
-Subject: [PATCH 16/16] backlight: always parse default-brightness-level
- property
+From 636fef3cc86a9915905a9f6548346a2ef7da7f19 Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@manjaro.org>
+Date: Thu, 13 May 2021 16:14:06 +0200
+Subject: [PATCH 11/16] backlight: pwm_bl: always parse
+ default-brightness-level property
 
-Previously the default-brightness-level property was only parsed if
-the brightness-levels property is set, too. Therefore there is no
-method to specify the desired default brightness in a device tree
-without also specifying  a brightness-levels table, too. Since this
-is discouraged this commit changes that behaviour to parse any present
-default-brightness-level property, even if there is no brightness-levels
-property.
+It is often desireable to set a default brightness for backlights as
+early as possible. At the moment in device trees this is only possible
+when also specifying a brightness table, too.
+This commit changes the behaviour of the fw node parsing to always
+consider the default-brightness-level property and apply it, even
+when there is no brightness table.
 
-Signed-off-by: Tobias Schramm <t.schramm@t-sys.eu>
+Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
 ---
  drivers/video/backlight/pwm_bl.c | 12 ++++++++++++
  1 file changed, 12 insertions(+)

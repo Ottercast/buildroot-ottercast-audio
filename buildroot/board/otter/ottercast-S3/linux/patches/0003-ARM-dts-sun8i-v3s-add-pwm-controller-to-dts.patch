@@ -1,0 +1,36 @@
+From 15cd734a175e85eeeadeed5832e26a24265470fe Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@manjaro.org>
+Date: Thu, 13 May 2021 15:36:31 +0200
+Subject: [PATCH 03/16] ARM: dts: sun8i: v3s: add pwm controller to dts
+
+The Allwinner V3s and V3 SoCs feature a DMA controller identical to the
+one used in the Allwinner sun7i A20.
+This commit adds it to the V3s dtsi.
+
+Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
+---
+ arch/arm/boot/dts/sun8i-v3s.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
+index 8b4156a687a2..81319b939cea 100644
+--- a/arch/arm/boot/dts/sun8i-v3s.dtsi
++++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
+@@ -413,6 +413,14 @@ wdt0: watchdog@1c20ca0 {
+ 			clocks = <&osc24M>;
+ 		};
+ 
++		pwm: pwm@1c21400 {
++			compatible = "allwinner,sun7i-a20-pwm";
++			reg = <0x01c21400 0xc>;
++			clocks = <&osc24M>;
++			#pwm-cells = <3>;
++			status = "disabled";
++		};
++
+ 		lradc: lradc@1c22800 {
+ 			compatible = "allwinner,sun4i-a10-lradc-keys";
+ 			reg = <0x01c22800 0x400>;
+-- 
+2.30.1
+

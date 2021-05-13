@@ -1,17 +1,19 @@
-From 8665fc80e64357c200b204b07ae5e6c8b22d92eb Mon Sep 17 00:00:00 2001
+From 09e63f97697ec81ec4de82f4c236f1c1a149ef6d Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
-Date: Thu, 18 Feb 2021 10:40:09 +0100
-Subject: [PATCH 5/5] clk: sunxi-ng: v3s: add support for audio-pll sigma-delta
- modulator
+Date: Thu, 18 Feb 2021 12:20:01 +0100
+Subject: [PATCH 05/16] clk: sunxi-ng: v3s: use sigma-delta modulation for
+ audio-pll
 
 Previously it was not possible to achieve clock rates of 24.576MHz and
 22.5792MHz, which are commonly required core clocks for the i2s
-peripheral of V3s based SoCs.
+peripheral of v3s based SoCs.
 
-Add suport for those clock rates through the audio pll's sigma-delta
+Add support for those clock rates through the audio pll's sigma-delta
 modulator.
 
 Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Link: https://lore.kernel.org/r/20210218112001.479018-2-t.schramm@manjaro.org
 ---
  drivers/clk/sunxi-ng/ccu-sun8i-v3s.c | 33 ++++++++++++++++++----------
  1 file changed, 22 insertions(+), 11 deletions(-)

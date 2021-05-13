@@ -1,13 +1,14 @@
-From 79330f9886f1fe188045a2c4ee2183ff4061c15a Mon Sep 17 00:00:00 2001
-From: Tobias Schramm <t.schramm@t-sys.eu>
-Date: Thu, 13 May 2021 10:00:08 +0200
-Subject: [PATCH 20/20] regmap: debugfs: enable regmap wirting via debugfs
+From 8a9c0308f088b659abe9c962ac43032623fdc44d Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@manjaro.org>
+Date: Thu, 13 May 2021 16:26:35 +0200
+Subject: [PATCH 15/16] regmap: debugfs: allow writing to regmaps from debugfs
 
-This is a bad idea. However, since I don't have much time to do the
-required ALSA changes to support the subwoofer at the moment this is
-the most effective solution I can think of.
+This is a bad idea. However it is required, since I have not figured out
+how to represent the chained TAS5825M setup of the ottercast to ALSA
+properly yet. Also we don't have any dangerous power management devices
+in regmap, so this should be fine as a hack for now.
 
-Not-signed-off-by: Tobias Schramm <tobias.schramm@manjaro.org>
+Not-signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
 ---
  drivers/base/regmap/regmap-debugfs.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)

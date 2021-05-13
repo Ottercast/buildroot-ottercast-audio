@@ -1,0 +1,57 @@
+From 993af7c80af064aca51253bc21b53e9eaa3e08c4 Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@manjaro.org>
+Date: Thu, 13 May 2021 16:05:40 +0200
+Subject: [PATCH 09/16] serdev: add shutdown callback to ops
+
+This commit adds a shutdown op to serdev devices. This change is required
+by the hci_bcm driver to be able to disable the internal regulator of
+Broadcom wireless modules on driver shutdown.
+
+Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
+---
+ drivers/tty/serdev/core.c | 11 +++++++++++
+ include/linux/serdev.h    |  1 +
+ 2 files changed, 12 insertions(+)
+
+diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
+index c5f0d936b003..4c91609b0520 100644
+--- a/drivers/tty/serdev/core.c
++++ b/drivers/tty/serdev/core.c
+@@ -432,11 +432,22 @@ static int serdev_drv_remove(struct device *dev)
+ 	return 0;
+ }
+ 
++static void serdev_drv_shutdown(struct device *dev)
++{
++	if (dev->driver) {
++		const struct serdev_device_driver *sdrv = to_serdev_device_driver(dev->driver);
++
++		if (sdrv->shutdown)
++			sdrv->shutdown(to_serdev_device(dev));
++	}
++}
++
+ static struct bus_type serdev_bus_type = {
+ 	.name		= "serial",
+ 	.match		= serdev_device_match,
+ 	.probe		= serdev_drv_probe,
+ 	.remove		= serdev_drv_remove,
++	.shutdown	= serdev_drv_shutdown,
+ };
+ 
+ /**
+diff --git a/include/linux/serdev.h b/include/linux/serdev.h
+index 9f14f9c12ec4..94050561325c 100644
+--- a/include/linux/serdev.h
++++ b/include/linux/serdev.h
+@@ -63,6 +63,7 @@ struct serdev_device_driver {
+ 	struct device_driver driver;
+ 	int	(*probe)(struct serdev_device *);
+ 	void	(*remove)(struct serdev_device *);
++	void	(*shutdown)(struct serdev_device *);
+ };
+ 
+ static inline struct serdev_device_driver *to_serdev_device_driver(struct device_driver *d)
+-- 
+2.30.1
+

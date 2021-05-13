@@ -1,16 +1,15 @@
-From 0d772940e97b0b7e48e477962b92468090e5ac5c Mon Sep 17 00:00:00 2001
-From: Tobias Schramm <t.schramm@t-sys.eu>
-Date: Thu, 8 Apr 2021 01:46:17 +0200
-Subject: [PATCH 15/15] spi: spi-bitbang: honor change in SPI mode between
- transfers
+From f1ee255bc14909990ca437f9e7b0774dd86b299a Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@manjaro.org>
+Date: Thu, 13 May 2021 16:17:49 +0200
+Subject: [PATCH 12/16] spi: spi-bitbang: update spi-mode specific callbacks on
+ every transfer
 
-Preiously the SPI mode on a slave device was only checked once during
-initial setup. This may however be too early to catch the SPI mode set
-by a SPI slave driver.
-Fix that by re-evaluating the SPI mode in the prepare phase of each
-transfer.
+The spi mode used by a device may during initial setup. Previously the
+devices spi mode was only evaluated once, resulting in the wrong SPI mode
+being used when it changed in the spi slaves probe function.
+Fix that by re-evaluating the spi mode during every transfer setup.
 
-Signed-off-by: Tobias Schramm <t.schramm@t-sys.eu>
+Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
 ---
  drivers/spi/spi-bitbang.c | 5 +++++
  1 file changed, 5 insertions(+)

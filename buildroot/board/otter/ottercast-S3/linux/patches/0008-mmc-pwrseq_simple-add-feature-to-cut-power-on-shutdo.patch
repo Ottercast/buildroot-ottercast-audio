@@ -1,21 +1,35 @@
-From 2383b09755cd54efefed823ad56bfb8f560df249 Mon Sep 17 00:00:00 2001
-From: Tobias Schramm <t.schramm@t-sys.eu>
-Date: Sun, 28 Mar 2021 01:21:52 +0100
-Subject: [PATCH 12/12] mmc: pwrseq_simple: add power-off-on-shutdown property
+From 8b5f722743c77cc6755f923c93b5f16991d2f72f Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@manjaro.org>
+Date: Thu, 13 May 2021 15:50:50 +0200
+Subject: [PATCH 08/16] mmc: pwrseq_simple: add feature to cut power on
+ shutdown
 
-Signed-off-by: Tobias Schramm <t.schramm@t-sys.eu>
+Some SDIO modules tend to be problematic when reinitialized after a reboot
+without cutting their power supply. One example of this behaviour is the
+Ampak AP6255 WiFi module, which will not enumerate if reinitialized
+without cutting the power to it before reinitialization.
+In theory this should not be an issue since there is a reset preformed
+before power up by this driver already. However, unfortunately many of
+those WiFi modules are also Bluetooth modules. Thus the also have two
+power enable pins, one for WiFi and another for Bluetooth.
+Unfortunately both those signals are or'-ed internally and control the
+same regulators. Thus it is only possible to reset the WiFi section of the
+module if both, WiFi enable and Bluetooth enable are deasserted together.
+Thus this patch is mirrored in the relevant HCI dirvers.
+
+Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
 ---
  .../bindings/mmc/mmc-pwrseq-simple.yaml       |  4 ++++
  drivers/mmc/core/pwrseq_simple.c              | 24 ++++++++++++++++---
  2 files changed, 25 insertions(+), 3 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml
-index 226fb191913d..6882196e8246 100644
+index 6cd57863c1db..9ffb95889a58 100644
 --- a/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml
 +++ b/Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml
-@@ -47,6 +47,10 @@ properties:
-       Delay in us after asserting the reset-gpios (if any)
+@@ -49,6 +49,10 @@ properties:
        during power off of the card.
+     $ref: /schemas/types.yaml#/definitions/uint32
  
 +  power-off-on-shutdown:
 +    description:
