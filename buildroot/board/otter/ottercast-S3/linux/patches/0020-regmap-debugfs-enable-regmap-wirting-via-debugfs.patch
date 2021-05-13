@@ -1,0 +1,30 @@
+From 79330f9886f1fe188045a2c4ee2183ff4061c15a Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@t-sys.eu>
+Date: Thu, 13 May 2021 10:00:08 +0200
+Subject: [PATCH 20/20] regmap: debugfs: enable regmap wirting via debugfs
+
+This is a bad idea. However, since I don't have much time to do the
+required ALSA changes to support the subwoofer at the moment this is
+the most effective solution I can think of.
+
+Not-signed-off-by: Tobias Schramm <tobias.schramm@manjaro.org>
+---
+ drivers/base/regmap/regmap-debugfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/base/regmap/regmap-debugfs.c b/drivers/base/regmap/regmap-debugfs.c
+index 8dfac7f3ed7a..8a45caabe797 100644
+--- a/drivers/base/regmap/regmap-debugfs.c
++++ b/drivers/base/regmap/regmap-debugfs.c
+@@ -290,7 +290,7 @@ static ssize_t regmap_map_read_file(struct file *file, char __user *user_buf,
+ 				   count, ppos);
+ }
+ 
+-#undef REGMAP_ALLOW_WRITE_DEBUGFS
++#define REGMAP_ALLOW_WRITE_DEBUGFS
+ #ifdef REGMAP_ALLOW_WRITE_DEBUGFS
+ /*
+  * This can be dangerous especially when we have clients such as
+-- 
+2.30.1
+
