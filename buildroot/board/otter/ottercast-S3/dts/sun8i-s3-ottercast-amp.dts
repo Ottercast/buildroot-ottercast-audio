@@ -226,9 +226,6 @@
 
 &i2s0 {
 	status = "okay";
-
-	pinctrl-names = "default";
-	pinctrl-0 = <&i2s0_pins>;
 };
 
 &mmc0 {
@@ -304,11 +301,6 @@
 	uart1_pg_pins: uart1-pg-pins {
 		pins = "PG6", "PG7";
 		function = "uart1";
-	};
-
-	i2s0_pins: i2s0-pins {
-		pins = "PG10", "PG11", "PG12", "PG13";
-		function = "i2s";
 	};
 
 	mmc2_pins: mmc2-pins {
