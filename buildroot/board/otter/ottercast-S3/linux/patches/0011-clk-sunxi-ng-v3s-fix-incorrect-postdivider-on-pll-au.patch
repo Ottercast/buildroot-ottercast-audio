@@ -1,7 +1,7 @@
-From 40d17a148def3a6f856973b4c14d46725f58cb9b Mon Sep 17 00:00:00 2001
+From 288bee5ce67329bf59e878fe6b9513ad3f3a857f Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
 Date: Thu, 13 May 2021 14:50:08 +0200
-Subject: [PATCH 07/16] clk: sunxi-ng: v3s: fix incorrect postdivider on
+Subject: [PATCH 11/20] clk: sunxi-ng: v3s: fix incorrect postdivider on
  pll-audio
 
 Commit 46060be6d840 ("clk: sunxi-ng: v3s: use sigma-delta modulation for audio-pll")
@@ -48,5 +48,5 @@ index a774942cb153..f49724a22540 100644
  	sunxi_ccu_probe(node, reg, ccu_desc);
  }
 -- 
-2.30.1
+2.31.1
 

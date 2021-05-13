@@ -1,7 +1,7 @@
-From 51dad27361b34e45c4d220ee7331f526267614ff Mon Sep 17 00:00:00 2001
+From 781b9ca56524e0815c48f928a8a2c6a4ae2c3f0e Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
 Date: Thu, 13 May 2021 15:50:50 +0200
-Subject: [PATCH 08/16] mmc: pwrseq_simple: add feature to cut power on
+Subject: [PATCH 12/20] mmc: pwrseq_simple: add feature to cut power on
  shutdown
 
 Some SDIO modules tend to be problematic when reinitialized after a reboot
@@ -106,5 +106,5 @@ index ea4d3670560e..fb4f8a6bf0fa 100644
  		.name = "pwrseq_simple",
  		.of_match_table = mmc_pwrseq_simple_of_match,
 -- 
-2.30.1
+2.31.1
 

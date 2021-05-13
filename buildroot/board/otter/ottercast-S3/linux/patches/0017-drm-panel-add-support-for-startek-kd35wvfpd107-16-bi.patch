@@ -1,7 +1,7 @@
-From e9f083f856b2f66a29b920c6f328c2616c3ece44 Mon Sep 17 00:00:00 2001
+From 6806cc54e56ccf6d631a06894a6039de3e972be3 Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
 Date: Thu, 13 May 2021 16:20:35 +0200
-Subject: [PATCH 13/16] drm/panel: add support for startek kd35wvfpd107 16-bit
+Subject: [PATCH 17/20] drm/panel: add support for startek kd35wvfpd107 16-bit
  RGB panel
 
 The startek kd35wvfpd107 is a 340x800 pixel 16-bit parallel RGB panel.
@@ -419,5 +419,5 @@ index 000000000000..8420c674c62a
 +MODULE_DESCRIPTION("Startek KD35WVFPD107 panel driver");
 +MODULE_LICENSE("GPL");
 -- 
-2.30.1
+2.31.1
 

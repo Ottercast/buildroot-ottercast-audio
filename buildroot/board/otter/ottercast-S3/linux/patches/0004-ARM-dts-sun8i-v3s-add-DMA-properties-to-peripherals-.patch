@@ -1,11 +1,11 @@
-From e4d4a8557866e1fa7dd48243d49d09b7f3cbfb02 Mon Sep 17 00:00:00 2001
+From 0a87516c5a9f874b615135f2ea7564df7c26bf6b Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
 Date: Thu, 13 May 2021 15:34:25 +0200
-Subject: [PATCH 02/16] ARM: dts: sun8i: v3s: add dmas property to devices
+Subject: [PATCH 04/20] ARM: dts: sun8i: v3s: add DMA properties to peripherals
  supporting DMA
 
-This commit adds dma properties to all devices supporting DMA,
-enabling accelerated data transfer to them.
+This commit adds DMA properties to all peripherals supporting DMA on the
+Allwinner V3s, enabling accelerated data transfer to them.
 
 Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
 ---
@@ -13,7 +13,7 @@ Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
  1 file changed, 10 insertions(+)
 
 diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
-index 8502a220c070..8b4156a687a2 100644
+index cf49457c6c44..2ff3384b9eb4 100644
 --- a/arch/arm/boot/dts/sun8i-v3s.dtsi
 +++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
 @@ -276,6 +276,8 @@ crypto@1c15000 {
@@ -25,7 +25,7 @@ index 8502a220c070..8b4156a687a2 100644
  			resets = <&ccu RST_BUS_CE>;
  			reset-names = "ahb";
  		};
-@@ -425,6 +427,8 @@ uart0: serial@1c28000 {
+@@ -434,6 +436,8 @@ uart0: serial@1c28000 {
  			reg-shift = <2>;
  			reg-io-width = <4>;
  			clocks = <&ccu CLK_BUS_UART0>;
@@ -34,7 +34,7 @@ index 8502a220c070..8b4156a687a2 100644
  			resets = <&ccu RST_BUS_UART0>;
  			status = "disabled";
  		};
-@@ -436,6 +440,8 @@ uart1: serial@1c28400 {
+@@ -445,6 +449,8 @@ uart1: serial@1c28400 {
  			reg-shift = <2>;
  			reg-io-width = <4>;
  			clocks = <&ccu CLK_BUS_UART1>;
@@ -43,7 +43,7 @@ index 8502a220c070..8b4156a687a2 100644
  			resets = <&ccu RST_BUS_UART1>;
  			status = "disabled";
  		};
-@@ -447,6 +453,8 @@ uart2: serial@1c28800 {
+@@ -456,6 +462,8 @@ uart2: serial@1c28800 {
  			reg-shift = <2>;
  			reg-io-width = <4>;
  			clocks = <&ccu CLK_BUS_UART2>;
@@ -52,7 +52,7 @@ index 8502a220c070..8b4156a687a2 100644
  			resets = <&ccu RST_BUS_UART2>;
  			pinctrl-0 = <&uart2_pins>;
  			pinctrl-names = "default";
-@@ -526,6 +534,8 @@ spi0: spi@1c68000 {
+@@ -535,6 +543,8 @@ spi0: spi@1c68000 {
  			interrupts = <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>;
  			clocks = <&ccu CLK_BUS_SPI0>, <&ccu CLK_SPI0>;
  			clock-names = "ahb", "mod";
@@ -62,5 +62,5 @@ index 8502a220c070..8b4156a687a2 100644
  			pinctrl-0 = <&spi0_pins>;
  			resets = <&ccu RST_BUS_SPI0>;
 -- 
-2.30.1
+2.31.1
 

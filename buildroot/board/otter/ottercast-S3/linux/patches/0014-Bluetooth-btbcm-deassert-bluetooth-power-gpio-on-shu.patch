@@ -1,7 +1,7 @@
-From 93fd8e093c105902ffa0c522280020f8ad2df95f Mon Sep 17 00:00:00 2001
+From b70e8344f76c72201d53e266056251c1cc9c345a Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
 Date: Thu, 13 May 2021 16:09:57 +0200
-Subject: [PATCH 10/16] Bluetooth: btbcm: deassert bluetooth power gpio on
+Subject: [PATCH 14/20] Bluetooth: btbcm: deassert bluetooth power gpio on
  shutdown
 
 Some WiFi + Bluetooth modules manufactured with Broadcom chips experience
@@ -46,5 +46,5 @@ index 8ea5ca8d71d6..eab8df59bd0f 100644
  		.name = "hci_uart_bcm",
  		.of_match_table = of_match_ptr(bcm_bluetooth_of_match),
 -- 
-2.30.1
+2.31.1
 

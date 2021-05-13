@@ -1,0 +1,42 @@
+From b8bdb5740e0c05be7d414f23731f9b485e430fc7 Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@manjaro.org>
+Date: Thu, 13 May 2021 22:52:52 +0200
+Subject: [PATCH 06/20] ASoC: dt-bindings: sun8i-a23-codec-analog: add
+ compatible for Allwinner V3
+
+The analog codec frontend of the Allwiner V3 is compatible with the analog
+codec frontend used on the Allwinner H3.
+This patch adds a compatible string for the analog codec frontend on the
+Allwinner V3 SoC.
+
+Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
+---
+ .../bindings/sound/allwinner,sun8i-a23-codec-analog.yaml | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/sound/allwinner,sun8i-a23-codec-analog.yaml b/Documentation/devicetree/bindings/sound/allwinner,sun8i-a23-codec-analog.yaml
+index 9718358826ab..69a21e3220fe 100644
+--- a/Documentation/devicetree/bindings/sound/allwinner,sun8i-a23-codec-analog.yaml
++++ b/Documentation/devicetree/bindings/sound/allwinner,sun8i-a23-codec-analog.yaml
+@@ -12,12 +12,15 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    enum:
++    oneOf:
+       # FIXME: This is documented in the PRCM binding, but needs to be
+       # migrated here at some point
+       # - allwinner,sun8i-a23-codec-analog
+-      - allwinner,sun8i-h3-codec-analog
+-      - allwinner,sun8i-v3s-codec-analog
++      - const: allwinner,sun8i-h3-codec-analog
++      - items:
++        - const: allwinner,sun8i-v3-codec-analog
++        - const: allwinner,sun8i-h3-codec-analog
++      - const: allwinner,sun8i-v3s-codec-analog
+ 
+   reg:
+     maxItems: 1
+-- 
+2.31.1
+
