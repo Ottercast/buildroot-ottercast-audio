@@ -1,7 +1,7 @@
-From 09e63f97697ec81ec4de82f4c236f1c1a149ef6d Mon Sep 17 00:00:00 2001
+From 93e5f0db673202a32281b7c1bf10711bb2f39d6d Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
 Date: Thu, 18 Feb 2021 12:20:01 +0100
-Subject: [PATCH 05/16] clk: sunxi-ng: v3s: use sigma-delta modulation for
+Subject: [PATCH 06/16] clk: sunxi-ng: v3s: use sigma-delta modulation for
  audio-pll
 
 Previously it was not possible to achieve clock rates of 24.576MHz and

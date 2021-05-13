@@ -1,4 +1,4 @@
-From 636fef3cc86a9915905a9f6548346a2ef7da7f19 Mon Sep 17 00:00:00 2001
+From 1647bbf03e3b1cf7132c70e8f208248b42579ddd Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
 Date: Thu, 13 May 2021 16:14:06 +0200
 Subject: [PATCH 11/16] backlight: pwm_bl: always parse

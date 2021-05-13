@@ -1,7 +1,7 @@
-From ae332847ba04c1eb1ac01fb0bd13b4b021af26a6 Mon Sep 17 00:00:00 2001
+From 52fbf0928b4a08210462a60bdcc762f9743ad282 Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
 Date: Thu, 13 May 2021 15:46:33 +0200
-Subject: [PATCH 07/16] ARM: dts: sun8i: V3: add I2S interface to dts
+Subject: [PATCH 05/16] ARM: dts: sun8i: V3: add I2S interface to dts
 
 The Allwinner V3 SoC features an I2S interface. The I2C peripheral is
 identical to that in the Allwinner H3 SoC.
@@ -9,14 +9,14 @@ This commit adds it to the Allwinner V3 dts.
 
 Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
 ---
- arch/arm/boot/dts/sun8i-v3.dtsi | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ arch/arm/boot/dts/sun8i-v3.dtsi | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
 diff --git a/arch/arm/boot/dts/sun8i-v3.dtsi b/arch/arm/boot/dts/sun8i-v3.dtsi
-index ca4672ed2e02..ee16286a1013 100644
+index ca4672ed2e02..56d204444388 100644
 --- a/arch/arm/boot/dts/sun8i-v3.dtsi
 +++ b/arch/arm/boot/dts/sun8i-v3.dtsi
-@@ -5,6 +5,23 @@
+@@ -5,6 +5,25 @@
  
  #include "sun8i-v3s.dtsi"
  
@@ -31,6 +31,8 @@ index ca4672ed2e02..ee16286a1013 100644
 +				clock-names = "apb", "mod";
 +				dmas = <&dma 3>, <&dma 3>;
 +				dma-names = "rx", "tx";
++				pinctrl-names = "default";
++				pinctrl-0 = <&i2s0_pins>;
 +				resets = <&ccu RST_BUS_I2S0>;
 +				status = "disabled";
 +			};
@@ -39,6 +41,16 @@ index ca4672ed2e02..ee16286a1013 100644
 +
  &ccu {
  	compatible = "allwinner,sun8i-v3-ccu";
+ };
+@@ -24,4 +43,9 @@ external_mdio: mdio@2 {
+ 
+ &pio {
+ 	compatible = "allwinner,sun8i-v3-pinctrl";
++
++	i2s0_pins: i2s0-pins {
++		pins = "PG10", "PG11", "PG12", "PG13";
++		function = "i2s";
++	};
  };
 -- 
 2.30.1

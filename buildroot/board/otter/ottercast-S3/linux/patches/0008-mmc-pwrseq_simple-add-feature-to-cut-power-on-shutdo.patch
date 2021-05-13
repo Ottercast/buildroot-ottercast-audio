@@ -1,4 +1,4 @@
-From 8b5f722743c77cc6755f923c93b5f16991d2f72f Mon Sep 17 00:00:00 2001
+From 51dad27361b34e45c4d220ee7331f526267614ff Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
 Date: Thu, 13 May 2021 15:50:50 +0200
 Subject: [PATCH 08/16] mmc: pwrseq_simple: add feature to cut power on

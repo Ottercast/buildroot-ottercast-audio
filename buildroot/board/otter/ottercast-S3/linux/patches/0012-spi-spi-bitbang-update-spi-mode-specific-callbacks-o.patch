@@ -1,4 +1,4 @@
-From f1ee255bc14909990ca437f9e7b0774dd86b299a Mon Sep 17 00:00:00 2001
+From 8db6d5e629234b668cc64823103ec372a214a652 Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
 Date: Thu, 13 May 2021 16:17:49 +0200
 Subject: [PATCH 12/16] spi: spi-bitbang: update spi-mode specific callbacks on

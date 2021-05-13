@@ -1,4 +1,4 @@
-From 8a9c0308f088b659abe9c962ac43032623fdc44d Mon Sep 17 00:00:00 2001
+From 11428a8bdec826955bf4e0e411a13b889bb28f58 Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
 Date: Thu, 13 May 2021 16:26:35 +0200
 Subject: [PATCH 15/16] regmap: debugfs: allow writing to regmaps from debugfs

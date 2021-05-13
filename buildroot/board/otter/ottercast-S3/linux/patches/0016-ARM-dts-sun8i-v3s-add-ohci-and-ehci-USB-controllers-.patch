@@ -1,4 +1,4 @@
-From 331683a99b8d01b718fa1a3393a644d12e7147fc Mon Sep 17 00:00:00 2001
+From 08b5d7e8249d34116d9b00b4fccdd36310256560 Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
 Date: Thu, 13 May 2021 17:54:14 +0200
 Subject: [PATCH 16/16] ARM: dts: sun8i: v3s: add ohci and ehci USB controllers

@@ -1,4 +1,4 @@
-From 988b034ef0b66b9adf971d0005c7f630ddaf0fb6 Mon Sep 17 00:00:00 2001
+From e9f083f856b2f66a29b920c6f328c2616c3ece44 Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
 Date: Thu, 13 May 2021 16:20:35 +0200
 Subject: [PATCH 13/16] drm/panel: add support for startek kd35wvfpd107 16-bit

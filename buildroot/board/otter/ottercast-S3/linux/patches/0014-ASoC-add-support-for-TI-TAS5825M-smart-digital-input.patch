@@ -1,4 +1,4 @@
-From ab3cfa3422e01c93a06035d9da0a33916152467d Mon Sep 17 00:00:00 2001
+From a668a6b46dad593181a8fbab38e1f0e75ef53c4e Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
 Date: Thu, 13 May 2021 16:23:22 +0200
 Subject: [PATCH 14/16] ASoC: add support for TI TAS5825M smart, digital input

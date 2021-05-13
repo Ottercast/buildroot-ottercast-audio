@@ -1,4 +1,4 @@
-From 965dc7d40defb28457c61bd82c73a13f521c11a9 Mon Sep 17 00:00:00 2001
+From 93fd8e093c105902ffa0c522280020f8ad2df95f Mon Sep 17 00:00:00 2001
 From: Tobias Schramm <t.schramm@manjaro.org>
 Date: Thu, 13 May 2021 16:09:57 +0200
 Subject: [PATCH 10/16] Bluetooth: btbcm: deassert bluetooth power gpio on
