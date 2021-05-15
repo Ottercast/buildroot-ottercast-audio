@@ -20,4 +20,17 @@ part uuid ${devtype} ${devnum}:${rootpart} rootuuid
 setenv bootargs initcall_debug root=PARTUUID=${rootuuid} ro rootwait earlycon fbcon=rotate:3
 load ${devtype} ${devnum}:${distro_bootpart} ${kernel_loadaddr} zImage
 load ${devtype} ${devnum}:${distro_bootpart} ${dtb_loadaddr} ${fdtfile}
+
+# Check for a MAC address extracted from efuse
+if test -n ${ethaddr}; then
+	# Parse MAC address, Linux expects an uint8_t array
+	setexpr ethaddr_components gsub ':' ' 0x' [0x${ethaddr}]
+	# Setup fdt modification
+	fdt addr ${dtb_loadaddr}
+	# Make some space for the extra property
+	fdt resize 128
+	# Insert MAC address into dtb
+	fdt set /soc/ethernet@1c30000 local-mac-address ${ethaddr_components}
+fi
+
 bootz ${kernel_loadaddr} - ${dtb_loadaddr}
