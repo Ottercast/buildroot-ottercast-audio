@@ -2,12 +2,16 @@
 Description=spotifyd
 Wants=network-online.target
 After=network.target network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=5
 
 [Service]
 Environment="SPOTIFYD_ARGS="
 EnvironmentFile=-/etc/default/spotifyd
 EnvironmentFile=-/tmp/dbus-session
 ExecStart=/usr/bin/spotifyd -d %H $SPOTIFYD_ARGS
+Restart=on-failure
+RestartSec=5s
 
 [Install]
 WantedBy=multi-user.target
