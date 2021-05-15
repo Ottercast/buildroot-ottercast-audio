@@ -10,6 +10,7 @@ EnvironmentFile=-/etc/default/ottercast-frontend
 EnvironmentFile=-/tmp/dbus-session
 ExecStart=/opt/ottercast-frontend/ottercast-frontend $OTTERCAST_FRONTEND_ARGS
 WorkingDirectory=/opt/ottercast-frontend
+Nice=10
 
 [Install]
 WantedBy=multi-user.target
