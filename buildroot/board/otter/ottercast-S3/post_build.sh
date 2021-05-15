@@ -6,7 +6,6 @@ BOARD_DIR="$(dirname $0)"
 
 cp -r "$BOARD_DIR"/skeleton/* "$TARGET_DIR"
 
-
 OTTERCAST_CONFFILE="$BINARIES_DIR"/config.ini
 
 if ! [ -f "$OTTERCAST_CONFFILE" ]; then
@@ -25,6 +24,8 @@ ln -fs /tmp/snapclient_env "$TARGET_DIR"/etc/default/snapclient
 ln -fs /tmp/resolv.conf "$TARGET_DIR"/etc/resolv.conf
 
 ln -fs /tmp/hostname "$TARGET_DIR"/etc/hostname
+ln -fsr tmp/hosts "$TARGET_DIR"/etc/hosts
+touch "$TARGET_DIR"/tmp/hosts
 
 ln -fs /tmp/system.pa "$TARGET_DIR"/etc/pulse/system.pa
 ln -fs /tmp/daemon.conf "$TARGET_DIR"/etc/pulse/daemon.conf
