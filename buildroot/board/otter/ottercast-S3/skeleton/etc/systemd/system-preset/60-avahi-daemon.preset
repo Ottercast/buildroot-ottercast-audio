@@ -1,0 +1,2 @@
+disable avahi-daemon.service
+disable avahi-daemon.socket
