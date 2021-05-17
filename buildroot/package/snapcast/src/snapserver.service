@@ -10,6 +10,7 @@ ExecStart=/usr/bin/snapserver --logging.sink=system --server.datadir=${HOME} $SN
 Restart=always
 RestartSec=2
 StartLimitIntervalSec=0
+Nice=-15
 
 [Install]
 WantedBy=multi-user.target
