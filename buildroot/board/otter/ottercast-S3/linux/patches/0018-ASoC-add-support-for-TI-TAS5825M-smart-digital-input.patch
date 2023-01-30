@@ -139,17 +139,17 @@ index 11ce98c25d6c..70e47d4d2d25 100644
 --- a/sound/soc/codecs/Makefile
 +++ b/sound/soc/codecs/Makefile
 @@ -212,6 +212,7 @@ snd-soc-sti-sas-objs := sti-sas.o
- snd-soc-tas5086-objs := tas5086.o
  snd-soc-tas571x-objs := tas571x.o
  snd-soc-tas5720-objs := tas5720.o
+ snd-soc-tas5805m-objs := tas5805m.o
 +snd-soc-tas5825m-objs := tas5825m.o
  snd-soc-tas6424-objs := tas6424.o
  snd-soc-tda7419-objs := tda7419.o
  snd-soc-tas2770-objs := tas2770.o
 @@ -522,6 +523,7 @@ obj-$(CONFIG_SND_SOC_TAS2764)	+= snd-soc-tas2764.o
- obj-$(CONFIG_SND_SOC_TAS5086)	+= snd-soc-tas5086.o
  obj-$(CONFIG_SND_SOC_TAS571X)	+= snd-soc-tas571x.o
  obj-$(CONFIG_SND_SOC_TAS5720)	+= snd-soc-tas5720.o
+ obj-$(CONFIG_SND_SOC_TAS5805M)	+= snd-soc-tas5805m.o
 +obj-$(CONFIG_SND_SOC_TAS5825M)	+= snd-soc-tas5825m.o
  obj-$(CONFIG_SND_SOC_TAS6424)	+= snd-soc-tas6424.o
  obj-$(CONFIG_SND_SOC_TDA7419)	+= snd-soc-tda7419.o
@@ -889,7 +889,7 @@ index 000000000000..0e702635b10e
 +	.idle_bias_on		= 1,
 +	.use_pmdown_time	= 1,
 +	.endianness		= 1,
-+	.non_legacy_dai_naming	= 1,
++	.legacy_dai_naming	= 0,
 +};
 +
 +/* PCM rates supported by the TAS5825M */
@@ -1120,10 +1120,10 @@ index 000000000000..0e702635b10e
 +	return 0;
 +}
 +
-+static int tas5825m_remove(struct i2c_client *client) {
++static void tas5825m_remove(struct i2c_client *client) {
 +	device_remove_file(&client->dev, &dev_attr_dsp_registers);
 +
-+	return 0;
++	return;
 +}
 +
 +#if IS_ENABLED(CONFIG_OF)
