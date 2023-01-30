@@ -1,5 +1,5 @@
 config BR2_PACKAGE_SHAIRPORT_SYNC_PULSEAUDIO
-	bool "shairport_sync_pulseaudio"
+	bool "shairport-sync"
 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
 	depends on BR2_INSTALL_LIBSTDCPP
 	select BR2_PACKAGE_ALSA_LIB
