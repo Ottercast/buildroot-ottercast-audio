@@ -129,9 +129,9 @@ index 2ba560bca61d..6611ffe2ee80 100644
  obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7703) += panel-sitronix-st7703.o
  obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7789V) += panel-sitronix-st7789v.o
 +obj-$(CONFIG_DRM_PANEL_STARTEK_KD35WVFPD107) += panel-startek-kd35wvfpd107.o
- obj-$(CONFIG_DRM_PANEL_SONY_ACX424AKP) += panel-sony-acx424akp.o
  obj-$(CONFIG_DRM_PANEL_SONY_ACX565AKM) += panel-sony-acx565akm.o
- obj-$(CONFIG_DRM_PANEL_TPO_TD028TTEC1) += panel-tpo-td028ttec1.o
+ obj-$(CONFIG_DRM_PANEL_SONY_TULIP_TRULY_NT35521) += panel-sony-tulip-truly-nt35521.o
+ obj-$(CONFIG_DRM_PANEL_TDO_TL070WSH30) += panel-tdo-tl070wsh30.o
 diff --git a/drivers/gpu/drm/panel/panel-startek-kd35wvfpd107.c b/drivers/gpu/drm/panel/panel-startek-kd35wvfpd107.c
 new file mode 100644
 index 000000000000..8420c674c62a
@@ -388,7 +388,7 @@ index 000000000000..8420c674c62a
 +	return 0;
 +}
 +
-+static int startek_spi_remove(struct spi_device *spi)
++static void startek_spi_remove(struct spi_device *spi)
 +{
 +	struct startek_panel *startek = spi_get_drvdata(spi);
 +
@@ -396,7 +396,7 @@ index 000000000000..8420c674c62a
 +	drm_panel_disable(&startek->panel);
 +	drm_panel_unprepare(&startek->panel);
 +
-+	return 0;
++	return;
 +}
 +
 +static const struct of_device_id startek_of_match[] = {
