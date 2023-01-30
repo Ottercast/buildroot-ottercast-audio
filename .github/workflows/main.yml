@@ -7,9 +7,12 @@ on:
   push: { }
   pull_request: { }
 
+env:
+  BUILDROOT_VERSION: 2022.11.1
+
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     outputs:
       pkgfile: ${{ steps.pkgname.outputs.pkgfile }}
@@ -24,9 +27,9 @@ jobs:
           sudo apt-get update
           sudo apt-get -y install build-essential bc gcc g++ patch binutils unzip rsync wget bzip2 gzip perl gcc-multilib g++-multilib
           cd ..
-          wget https://buildroot.org/downloads/buildroot-2021.02.1.tar.gz
-          tar -xaf buildroot-2021.02.1.tar.gz
-          cd buildroot-2021.02.1
+          wget https://buildroot.org/downloads/buildroot-${BUILDROOT_VERSION}.tar.gz
+          tar -xaf buildroot-${BUILDROOT_VERSION}.tar.gz
+          cd buildroot-${BUILDROOT_VERSION}
           make BR2_EXTERNAL=../buildroot-ottercast-audio/buildroot/ ottercast_s3_defconfig
           make -j$(nproc --all)
           gzip output/images/sdcard.img
@@ -35,7 +38,7 @@ jobs:
       # First party upload plugin is magic and does not need github token
       - id: pkgname
         name: Find image name
-        run: echo "::set-output name=imgfile::$(realpath "$GITHUB_WORKSPACE"/../buildroot-2021.02.1/output/images/sdcard.img.gz)"
+        run: echo "::set-output name=imgfile::$(realpath "$GITHUB_WORKSPACE"/../buildroot-${BUILDROOT_VERSION}/output/images/sdcard.img.gz)"
 
       - name: Upload image
         uses: actions/upload-artifact@v2-preview
