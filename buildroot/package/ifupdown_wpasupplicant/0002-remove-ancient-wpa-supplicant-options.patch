@@ -1,0 +1,19 @@
+--- a/debian/ifupdown/functions.sh	2023-01-30 22:29:12.911233540 +0100
++++ b/debian/ifupdown/functions.sh	2023-01-30 22:29:49.670674402 +0100
+@@ -185,7 +185,6 @@
+ # -D	driver backend ('wext' if none given)
+ # -P	process ID file
+ # -C	path to ctrl_interface socket directory
+-# -s    log to syslog
+ #
+ # Conditional options:
+ # -c	configuration file
+@@ -197,7 +196,7 @@
+ 	[ -n "$WPA_SUP_CONF" ] || return 0
+ 
+ 	local WPA_SUP_OPTIONS
+-	WPA_SUP_OPTIONS="-s -B -P $WPA_SUP_PIDFILE -i $WPA_IFACE"
++	WPA_SUP_OPTIONS="-B -P $WPA_SUP_PIDFILE -i $WPA_IFACE"
+ 
+ 	if [ -n "$WPA_ACTION_SCRIPT" ]; then
+ 		if [ -x "$WPA_ACTION_SCRIPT" ]; then
