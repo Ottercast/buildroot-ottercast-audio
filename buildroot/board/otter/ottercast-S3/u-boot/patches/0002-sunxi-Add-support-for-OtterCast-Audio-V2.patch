@@ -4,7 +4,7 @@ Date: Wed, 10 Feb 2021 15:32:27 +0100
 Subject: [PATCH 2/6] sunxi: Add support for OtterCast Audio V2
 
 The OtterCast Audio V2 is an Allwinner S3 based SBC designed by
-Jan Henrik Hemsing. It is primarily designed as a audio streaming
+Jana Marie Hemsing. It is primarily designed as a audio streaming
 device, featuring a high quality I2S DAC, as well as a single fast
 ethernet port, 2.4 GHz b/g/n WIFi and Bluetooth 4.2.
 
