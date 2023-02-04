@@ -1,0 +1,24 @@
+board: otter: ottercast-S3: change UAC gadget AltIF descriptor strings to Ottercast
+
+This mods the USB descriptor string definitions for the UAC1 gadget to
+be named more descriptively as Ottercast. macOS and iOS will only show
+the IF_ALT0/IF_ALT1 strings, instead of the device name or description.
+---
+
+--- a/drivers/usb/gadget/function/f_uac1.c	2023-01-24 07:24:44.000000000 +0100
++++ b/drivers/usb/gadget/function/f_uac1.c	2023-02-04 21:21:04.536166477 +0100
+@@ -318,10 +318,10 @@
+ 	[STR_USB_IN_OT].s = "Capture Output terminal",
+ 	[STR_FU_IN].s = "Capture Volume",
+ 	[STR_FU_OUT].s = "Playback Volume",
+-	[STR_AS_OUT_IF_ALT0].s = "Playback Inactive",
+-	[STR_AS_OUT_IF_ALT1].s = "Playback Active",
+-	[STR_AS_IN_IF_ALT0].s = "Capture Inactive",
+-	[STR_AS_IN_IF_ALT1].s = "Capture Active",
++	[STR_AS_OUT_IF_ALT0].s = "Ottercast USB",
++	[STR_AS_OUT_IF_ALT1].s = "Ottercast USB",
++	[STR_AS_IN_IF_ALT0].s = "Ottercast USB Capture",
++	[STR_AS_IN_IF_ALT1].s = "Ottercast USB Capture",
+ 	{ },
+ };
+ 
