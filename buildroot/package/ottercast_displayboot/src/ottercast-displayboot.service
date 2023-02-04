@@ -2,6 +2,7 @@
 Description=Ottercast Displayboot
 DefaultDependencies=no
 Before=basic.target
+After=systemd-journald.service
 
 [Service]
 ExecStart=/opt/ottercast-displayboot/displayboot
