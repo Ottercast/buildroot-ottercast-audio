@@ -11,6 +11,8 @@ Restart=always
 RestartSec=2
 StartLimitIntervalSec=0
 Nice=-15
+User=otter
+Group=otter
 
 [Install]
 WantedBy=multi-user.target

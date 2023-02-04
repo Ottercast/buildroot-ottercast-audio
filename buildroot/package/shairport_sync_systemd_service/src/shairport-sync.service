@@ -10,6 +10,8 @@ EnvironmentFile=-/etc/default/shairport-sync
 EnvironmentFile=-/tmp/dbus-session
 ExecStart=/usr/bin/shairport-sync $SHAIRPORT_SYNC_ARGS
 Nice=-15
+User=otter
+Group=otter
 
 [Install]
 WantedBy=multi-user.target

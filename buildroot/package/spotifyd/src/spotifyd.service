@@ -13,6 +13,8 @@ ExecStart=/usr/bin/spotifyd -d %H $SPOTIFYD_ARGS
 Restart=on-failure
 RestartSec=5s
 Nice=-15
+User=otter
+Group=otter
 
 [Install]
 WantedBy=multi-user.target

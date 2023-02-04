@@ -29,7 +29,7 @@ ln -fsr tmp/hostname "$TARGET_DIR"/etc/hostname
 ln -fsr tmp/hosts "$TARGET_DIR"/etc/hosts
 touch "$TARGET_DIR"/tmp/hosts
 
-ln -fsr tmp/system.pa "$TARGET_DIR"/etc/pulse/system.pa
+ln -fsr tmp/default.pa "$TARGET_DIR"/etc/pulse/default.pa
 ln -fsr tmp/daemon.conf "$TARGET_DIR"/etc/pulse/daemon.conf
 
 mkdir -p "$TARGET_DIR"/root/.config/pulse
