@@ -1,0 +1,1 @@
+	otter 1000 otter -2 * /tmp/otter-home /bin/bash audio,video,pulse,pulse-access,dbus Nyaa

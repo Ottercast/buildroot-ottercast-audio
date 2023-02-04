@@ -11,6 +11,8 @@ EnvironmentFile=-/tmp/dbus-session
 ExecStart=/opt/ottercast-frontend/ottercast-frontend $OTTERCAST_FRONTEND_ARGS
 WorkingDirectory=/opt/ottercast-frontend
 Nice=10
+User=otter
+Group=otter
 
 [Install]
 WantedBy=multi-user.target
