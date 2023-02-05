@@ -14,6 +14,11 @@ define IFUPDOWN_WPASUPPLICANT_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 755 $(@D)/debian/ifupdown/wpasupplicant/ifupdown.sh \
 		$(TARGET_DIR)/etc/wpa_supplicant/ifupdown.sh
 
+	mkdir -p $(TARGET_DIR)/etc/network/if-pre-up.d
+	mkdir -p $(TARGET_DIR)/etc/network/if-up.d
+	mkdir -p $(TARGET_DIR)/etc/network/if-down.d
+	mkdir -p $(TARGET_DIR)/etc/network/if-post-down.d
+
 	ln -fs /etc/wpa_supplicant/ifupdown.sh \
 		$(TARGET_DIR)/etc/network/if-pre-up.d/wpasupplicant
 
