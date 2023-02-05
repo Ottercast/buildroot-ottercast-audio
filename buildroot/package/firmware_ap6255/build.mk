@@ -7,16 +7,16 @@ FIRMWARE_AP6255_SITE = $(call github,OtterCast,broadcom-firmware,v$(FIRMWARE_AP6
 define FIRMWARE_AP6255_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 644 $(@D)/cyfmac43455-sdio.bin \
 		$(TARGET_DIR)/usr/lib/firmware/cypress/cyfmac43455-sdio.bin
-	ln -f -s ../cypress/cyfmac43455-sdio.bin \
-		$(TARGET_DIR)/usr/lib/firmware/brcm/brcmfmac43455-sdio.bin
 	$(INSTALL) -D -m 644 $(@D)/cyfmac43455-sdio.clm_blob \
 		$(TARGET_DIR)/usr/lib/firmware/cypress/cyfmac43455-sdio.clm_blob
-	ln -f -s ../cypress/cyfmac43455-sdio.clm_blob \
-		$(TARGET_DIR)/usr/lib/firmware/brcm/brcmfmac43455-sdio.clm_blob
 	$(INSTALL) -D -m 644 $(@D)/brcmfmac43455-sdio.txt \
 		$(TARGET_DIR)/usr/lib/firmware/brcm/brcmfmac43455-sdio.txt
 	$(INSTALL) -D -m 644 $(@D)/BCM4345C0.hcd \
 		$(TARGET_DIR)/usr/lib/firmware/brcm/BCM4345C0.hcd
+	ln -f -s ../cypress/cyfmac43455-sdio.bin \
+		$(TARGET_DIR)/usr/lib/firmware/brcm/brcmfmac43455-sdio.bin
+	ln -f -s ../cypress/cyfmac43455-sdio.clm_blob \
+		$(TARGET_DIR)/usr/lib/firmware/brcm/brcmfmac43455-sdio.clm_blob
 endef
 
 $(eval $(generic-package))
