@@ -1,8 +1,10 @@
 config BR2_PACKAGE_OTTERCAST_WEBINTERFACE
        bool "OtterCast Webinterface"
        select BR2_PACKAGE_PHP
-       select BR2_PACKAGE_PHP_SAPI_CLI
-       select BR2_PACKAGE_PHP_SAPI_CGI
        select BR2_PACKAGE_PHP_EXT_JSON
+       select BR2_PACKAGE_PHP_SAPI_CGI
+       select BR2_PACKAGE_PHP_SAPI_CLI
+       select BR2_PACKAGE_SYSTEMD
+       select BR2_PACKAGE_UHTTPD
        help
          Ottercast Webinterface
