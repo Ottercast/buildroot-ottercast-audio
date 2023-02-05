@@ -9,7 +9,7 @@ SHAIRPORT_SYNC_PULSEAUDIO_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRP
 
 SHAIRPORT_SYNC_PULSEAUDIO_LICENSE = MIT, BSD-3-Clause
 SHAIRPORT_SYNC_PULSEAUDIO_LICENSE_FILES = LICENSES
-SHAIRPORT_SYNC_PULSEAUDIO_DEPENDENCIES = alsa-lib libconfig popt host-pkgconf
+SHAIRPORT_SYNC_PULSEAUDIO_DEPENDENCIES = alsa-lib libconfig popt host-pkgconf pulseaudio
 
 # git clone, no configure
 SHAIRPORT_SYNC_PULSEAUDIO_AUTORECONF = YES
