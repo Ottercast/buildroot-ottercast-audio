@@ -12,7 +12,7 @@ env:
 
 jobs:
   build:
-    runs-on: [self-hosted, hetzner-ccx32]
+    runs-on: [self-hosted, hetzner-ccx32, linux]
 
     outputs:
       pkgfile: ${{ steps.pkgname.outputs.pkgfile }}
