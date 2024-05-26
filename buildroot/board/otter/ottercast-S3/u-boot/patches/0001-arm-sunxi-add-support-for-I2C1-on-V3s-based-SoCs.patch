@@ -1,0 +1,45 @@
+From 4952d2a7f66e7499cb43f0bb9566ce32ec344f51 Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@manjaro.org>
+Date: Sun, 26 May 2024 16:11:48 +0200
+Subject: [PATCH 1/5] arm: sunxi: add support for I2C1 on V3s-based SoCs
+
+Previously enabling I2C1 when using a V3s-based SoC had no effect.
+Set pinmux on PE21 and PE22 to I2C1 function when enabling I2C1 on
+V3s-based SoCs.
+
+Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
+---
+ board/sunxi/board.c  | 4 ++++
+ include/sunxi_gpio.h | 1 +
+ 2 files changed, 5 insertions(+)
+
+diff --git a/board/sunxi/board.c b/board/sunxi/board.c
+index 8c12c8dead..78d54c0437 100644
+--- a/board/sunxi/board.c
++++ b/board/sunxi/board.c
+@@ -98,6 +98,10 @@ void i2c_init_board(void)
+ 	sunxi_gpio_set_cfgpin(SUNXI_GPH(16), SUN6I_GPH_TWI1);
+ 	sunxi_gpio_set_cfgpin(SUNXI_GPH(17), SUN6I_GPH_TWI1);
+ 	clock_twi_onoff(1, 1);
++#elif defined(CONFIG_MACH_SUN8I_V3S)
++	sunxi_gpio_set_cfgpin(SUNXI_GPE(21), SUN8I_V3S_GPE_TWI1);
++	sunxi_gpio_set_cfgpin(SUNXI_GPE(22), SUN8I_V3S_GPE_TWI1);
++	clock_twi_onoff(1, 1);
+ #elif defined(CONFIG_MACH_SUN8I)
+ 	sunxi_gpio_set_cfgpin(SUNXI_GPH(4), SUN8I_GPH_TWI1);
+ 	sunxi_gpio_set_cfgpin(SUNXI_GPH(5), SUN8I_GPH_TWI1);
+diff --git a/include/sunxi_gpio.h b/include/sunxi_gpio.h
+index db3742c039..175b13a887 100644
+--- a/include/sunxi_gpio.h
++++ b/include/sunxi_gpio.h
+@@ -113,6 +113,7 @@ enum sunxi_gpio_number {
+ #define SUN4I_GPB_TWI1		2
+ #define SUN5I_GPB_TWI1		2
+ #define SUN8I_V3S_GPB_TWI0	2
++#define SUN8I_V3S_GPE_TWI1	3
+ #define SUN4I_GPB_UART0		2
+ #define SUN5I_GPB_UART0		2
+ #define SUN8I_GPB_UART2		2
+-- 
+2.30.2
+
