@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-SNAPCAST_VERSION = v0.26.0
+SNAPCAST_VERSION = v0.28.0
 SNAPCAST_SITE = $(call github,badaix,snapcast,$(SNAPCAST_VERSION))
 SNAPCAST_DEPENDENCIES = boost libogg alsa-lib avahi pulseaudio # libstdcpp libatomic libflac libvorbisidec
 SNAPCAST_LICENSE = GPL-3.0+
@@ -12,13 +12,13 @@ SNAPCAST_LICENSE_FILES = LICENSE
 
 define SNAPCLIENT_INSTALL_CONFIG
 	mkdir -p $(TARGET_DIR)/etc/default
-	$(INSTALL) -m 0755 -D $(@D)/debian/snapclient.default $(TARGET_DIR)/etc/default/snapclient
+	$(INSTALL) -m 0755 -D $(@D)/extras/package/debian/snapclient.default $(TARGET_DIR)/etc/default/snapclient
 endef
 
 
 define SNAPSERVER_INSTALL_CONFIG
 	mkdir -p $(TARGET_DIR)/etc/default
-	$(INSTALL) -m 0755 -D $(@D)/debian/snapserver.default $(TARGET_DIR)/etc/default/snapserver
+	$(INSTALL) -m 0755 -D $(@D)/extras/package/debian/snapserver.default $(TARGET_DIR)/etc/default/snapserver
 	$(INSTALL) -m 0755 -D $(@D)/server/etc/snapserver.conf $(TARGET_DIR)/etc/
 endef
 
