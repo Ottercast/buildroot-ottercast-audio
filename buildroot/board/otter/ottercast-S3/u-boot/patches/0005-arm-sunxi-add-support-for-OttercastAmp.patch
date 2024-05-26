@@ -1,34 +1,46 @@
-From 9bc9d3a4daf0bdebb1c3e9c7efeb54eb8e1c4e22 Mon Sep 17 00:00:00 2001
-From: Tobias Schramm <t.schramm@t-sys.eu>
-Date: Mon, 15 Mar 2021 12:23:41 +0100
-Subject: [PATCH 4/6] arm: sun8i: add support for OtterCast Amp
+From 4a55eb2f3a040aba0e62b2637da0c3ccb1940dea Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@manjaro.org>
+Date: Sun, 26 May 2024 16:38:59 +0200
+Subject: [PATCH 5/5] arm: sunxi: add support for OttercastAmp
 
-The OtterCast Amp is a S3 based SBC for audio streaming. It integrates two
-TAS5825 class D amplifiers with builtin codec, fast ethernet via the internal
-MAC and PHY and dual-band WLAN/BT through an AP6255 SDIO module.
+The OttercastAmp is an audio streaming device based on the Sochip S3 SoC
+with a builtin high power Class D audio amplifier. It also features an
+analog audio input.
+
+Specifications:
+ - SoC: Sochip S3 SiP
+ - RAM: 128MiB DDR3 (in-package)
+ - Storage: microSD card, eMMC
+ - Power: USB-C PD (5V to 20V)
+ - Ethernet: 100Mbit/s Ethernet
+ - WLAN & BT: AP6236, AP6255 or AP6256 WLAN and Bluetooth module
+ - Audio: 2x TAS5825M smart amplifier with optional DSP
+ - Display: 340x800px IPS LCD
+
+Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
 ---
  arch/arm/dts/Makefile                   |   1 +
  arch/arm/dts/sun8i-s3-ottercast-amp.dts | 154 ++++++++++++++++++++++++
- configs/ottercast_amp_defconfig         |  13 ++
- 3 files changed, 168 insertions(+)
+ configs/ottercast_amp_defconfig         |  18 +++
+ 3 files changed, 173 insertions(+)
  create mode 100644 arch/arm/dts/sun8i-s3-ottercast-amp.dts
  create mode 100644 configs/ottercast_amp_defconfig
 
 diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
-index 9aa29d2463..f3b0b53f06 100644
+index 9eaf4b8b8e..3bf528a0ed 100644
 --- a/arch/arm/dts/Makefile
 +++ b/arch/arm/dts/Makefile
-@@ -598,6 +598,7 @@ dtb-$(CONFIG_MACH_SUN8I_R40) += \
- 	sun8i-r40-bananapi-m2-ultra.dtb \
+@@ -810,6 +810,7 @@ dtb-$(CONFIG_MACH_SUN8I_R40) += \
  	sun8i-v40-bananapi-m2-berry.dtb
  dtb-$(CONFIG_MACH_SUN8I_V3S) += \
+ 	sun8i-s3-elimo-initium.dtb \
 +	sun8i-s3-ottercast-amp.dtb \
  	sun8i-s3-ottercast-audio-v2.dtb \
  	sun8i-s3-pinecube.dtb \
- 	sun8i-v3s-licheepi-zero.dtb
+ 	sun8i-v3-sl631-imx179.dtb \
 diff --git a/arch/arm/dts/sun8i-s3-ottercast-amp.dts b/arch/arm/dts/sun8i-s3-ottercast-amp.dts
 new file mode 100644
-index 0000000000..ed86554f30
+index 0000000000..533f5ebc0f
 --- /dev/null
 +++ b/arch/arm/dts/sun8i-s3-ottercast-amp.dts
 @@ -0,0 +1,154 @@
@@ -44,10 +56,11 @@ index 0000000000..ed86554f30
 +
 +/ {
 +	model = "OtterCast Amp";
-+	compatible = "otter,ottercast-amp", "allwinner,sun8i-s3";
++	compatible = "ottercast,ottercast-amp", "allwinner,sun8i-s3";
 +
 +	aliases {
 +		serial0 = &uart1;
++		ethernet0 = &emac;
 +	};
 +
 +	chosen {
@@ -170,10 +183,9 @@ index 0000000000..ed86554f30
 +};
 +
 +&uart1 {
-+	status = "okay";
-+
 +	pinctrl-names = "default";
 +	pinctrl-0 = <&uart1_pg_pins>;
++	status = "okay";
 +};
 +
 +&uart2 {
@@ -188,23 +200,28 @@ index 0000000000..ed86554f30
 +};
 diff --git a/configs/ottercast_amp_defconfig b/configs/ottercast_amp_defconfig
 new file mode 100644
-index 0000000000..707b83610d
+index 0000000000..55e176ed90
 --- /dev/null
 +++ b/configs/ottercast_amp_defconfig
-@@ -0,0 +1,13 @@
+@@ -0,0 +1,18 @@
 +CONFIG_ARM=y
 +CONFIG_ARCH_SUNXI=y
++CONFIG_DEFAULT_DEVICE_TREE="sun8i-s3-ottercast-amp"
 +CONFIG_SPL=y
 +CONFIG_MACH_SUN8I_V3S=y
 +CONFIG_SUNXI_DRAM_DDR3_1333=y
 +CONFIG_DRAM_CLK=504
 +CONFIG_DRAM_ODT_EN=y
-+CONFIG_DEFAULT_DEVICE_TREE="sun8i-s3-ottercast-amp"
++CONFIG_I2C1_ENABLE=y
++# CONFIG_HAS_ARMV7_SECURE_BASE is not set
++CONFIG_I2C_SET_DEFAULT_BUS_NUM=y
++CONFIG_SYS_I2C_MVTWSI=y
 +CONFIG_LED=y
 +CONFIG_LED_BLINK=y
 +CONFIG_LED_GPIO=y
-+# CONFIG_NETDEVICES is not set
++CONFIG_DM_ETH_PHY=y
++CONFIG_SUN8I_EMAC=y
 +CONFIG_CONS_INDEX=2
 -- 
-2.30.1
+2.30.2
 
