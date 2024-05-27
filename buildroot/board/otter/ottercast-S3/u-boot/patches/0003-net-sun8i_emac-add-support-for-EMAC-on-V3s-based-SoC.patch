@@ -1,0 +1,41 @@
+From 5e75040a3552de7cb36711033aa56b678893d02a Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <t.schramm@manjaro.org>
+Date: Sun, 26 May 2024 16:20:55 +0200
+Subject: [PATCH 3/5] net: sun8i_emac: add support for EMAC on V3s-based SoCs
+
+The Allwinner V3s SoC and related SoCs feature an Ethernet MAC.
+Add support for it.
+
+Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
+---
+ drivers/net/sun8i_emac.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/net/sun8i_emac.c b/drivers/net/sun8i_emac.c
+index 8bff4fe9a9..d9d1825b69 100644
+--- a/drivers/net/sun8i_emac.c
++++ b/drivers/net/sun8i_emac.c
+@@ -903,6 +903,11 @@ static const struct emac_variant emac_variant_h6 = {
+ 	.support_rmii		= true,
+ };
+ 
++static const struct emac_variant emac_variant_v3s = {
++	.syscon_offset		= 0x30,
++	.soc_has_internal_phy	= true,
++};
++
+ static const struct udevice_id sun8i_emac_eth_ids[] = {
+ 	{ .compatible = "allwinner,sun8i-a83t-emac",
+ 	  .data = (ulong)&emac_variant_a83t },
+@@ -914,6 +919,8 @@ static const struct udevice_id sun8i_emac_eth_ids[] = {
+ 	  .data = (ulong)&emac_variant_a64 },
+ 	{ .compatible = "allwinner,sun50i-h6-emac",
+ 	  .data = (ulong)&emac_variant_h6 },
++	{ .compatible = "allwinner,sun8i-v3s-emac",
++	  .data = (ulong)&emac_variant_v3s },
+ 	{ }
+ };
+ 
+-- 
+2.30.2
+
