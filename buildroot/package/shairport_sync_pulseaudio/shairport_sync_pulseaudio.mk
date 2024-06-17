@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-SHAIRPORT_SYNC_PULSEAUDIO_VERSION = 4.1.1
+SHAIRPORT_SYNC_PULSEAUDIO_VERSION = 4.3.2
 SHAIRPORT_SYNC_PULSEAUDIO_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_PULSEAUDIO_VERSION))
 
 SHAIRPORT_SYNC_PULSEAUDIO_LICENSE = MIT, BSD-3-Clause
