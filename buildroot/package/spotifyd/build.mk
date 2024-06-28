@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-SPOTIFYD_VERSION = 0.3.4
+SPOTIFYD_VERSION = 0.3.5
 SPOTIFYD_SITE = $(call github,Spotifyd,spotifyd,v$(SPOTIFYD_VERSION))
 SPOTIFYD_LICENSE = MIT
 SPOTIFYD_LICENSE_FILES = LICENSE
